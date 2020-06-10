@@ -1,6 +1,6 @@
 - [X] Dependency management with Poetry
 - [X] CLI (click)
-- [ ] Resource directory
+- [X] Resource directory
 - [ ] Valid README
 - [ ] Code of conduct
 - [ ] Contributing

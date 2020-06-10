@@ -6,6 +6,7 @@ authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
 license = "{{cookiecutter.license_name}}"
 readme = 'README.rst'
 repository = "{{cookiecutter.repository_url}}"
+include = ["res/"]
 
 [tool.poetry.scripts]
 {%- if cookiecutter.cli %}

@@ -34,6 +34,9 @@ context_spec: Mapping[str, List[POD]] = {
 def verify(dirf: Path, context: Mapping[str, POD]) -> None:
     if context["cli"]:
         subprocess.run(["poetry", "run", context["package_name"]], cwd=dirf)
+        # TODO: assert package_name on the path in install
+
+    # TODO: assert resource dir exists in install
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
