@@ -1,5 +1,5 @@
 - [X] Dependency management with Poetry
-- [ ] CLI (click)
+- [X] CLI (click)
 - [ ] Resource directory
 - [ ] Valid README
 - [ ] Code of conduct

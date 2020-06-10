@@ -7,6 +7,9 @@ license = "{{cookiecutter.license}}"
 readme = 'README.rst'
 repository = "{{cookiecutter.repository_url}}"
 
+[tool.poetry.scripts]
+rtd = "{{cookiecutter.package_name}}.cli:main"
+
 [tool.poetry.dependencies]
 python = "{{cookiecutter.python_version}}"
 
