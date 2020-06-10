@@ -3,12 +3,16 @@ name = "{{cookiecutter.package_name}}"
 version = "0.0.0"
 description = "{{cookiecutter.description}}"
 authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
-license = "{{cookiecutter.license}}"
+license = "{{cookiecutter.license_name}}"
 readme = 'README.rst'
 repository = "{{cookiecutter.repository_url}}"
 
 [tool.poetry.scripts]
+{%- if cookiecutter.cli %}
 rtd = "{{cookiecutter.package_name}}.cli:main"
+{%- else -%}
+# rtd = "package.module:function"
+{%- endif -%}
 
 [tool.poetry.dependencies]
 python = "{{cookiecutter.python_version}}"
