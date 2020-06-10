@@ -2,7 +2,7 @@
 - [X] CLI (click)
 - [X] Resource directory
 - [ ] Valid README
-- [ ] Code of conduct
+- [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
 - [ ] Contributing
 - [ ] Valid license
 - [ ] Formatting (black, isort flake8)
@@ -18,3 +18,4 @@
 - [ ] Version management (bumpversion or punch?)
 - [ ] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
+- [ ] Fill first commit

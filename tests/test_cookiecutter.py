@@ -27,16 +27,34 @@ def test_template() -> None:
 
 context_spec: Mapping[str, List[POD]] = {
     "package_name": ["nameless"],
-    "cli": [True, False],
+    "enable_cli": [True, False],
+    "enable_resource_directory": [True, False],
+    "enable_autoflake": [True, False],
 }
 
 
 def verify(dirf: Path, context: Mapping[str, POD]) -> None:
-    if context["cli"]:
+    if context["enable_cli"]:
         subprocess.run(["poetry", "run", context["package_name"]], cwd=dirf)
         # TODO: assert package_name on the path in install
+    else:
+        assert not (dirf / context["package_name"] / "cli.py").exists()
 
-    # TODO: assert resource dir exists in install
+    if context["enable_resource_directory"]:
+        # TODO: assert resource dir exists in install
+        pass
+    else:
+        assert not (dirf / "res").exists()
+
+    script_test_output = subprocess.run(
+        ["./scripts/test.sh"],
+        cwd=dirf,
+        env=dict(verbose="true"),
+        capture_output=True
+    ).stdout
+
+    for tool in ["autoflake", "isort", "black", "pylint", "bandit", "mypy", "pytest"]:
+        assert context[f"enable_{tool}"] == (tool in script_test_output)
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
