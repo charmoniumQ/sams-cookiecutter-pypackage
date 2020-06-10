@@ -1,8 +1,9 @@
-- [ ] Dependency management with Poetry
+- [X] Dependency management with Poetry
 - [ ] CLI (click)
 - [ ] Resource directory
 - [ ] Valid README
 - [ ] Code of conduct
+- [ ] Contributing
 - [ ] Valid license
 - [ ] Formatting (black, isort flake8)
 - [ ] Static analysis (mypy, bandit, pylint)

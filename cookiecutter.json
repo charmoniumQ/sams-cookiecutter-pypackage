@@ -1,2 +1,11 @@
 {
+    "package_name": "nameless",
+    "repository_name": "python-nameless",
+	"repository_url": "https://github.com/charmoniumQ/python-nameless",
+    "description": "Foo's the bar",
+    "author_name": "Samuel Grayson",
+	"author_email": "sam+dev@samgrayson.me"
+	"license_name": "NCSA",
+	"license_plaintext_url": "",
+	"python_version": "^3.8"
 }
