@@ -10,13 +10,14 @@
 	, "license_name": "NCSA"
 	, "license_plaintext_url": ""
 	, "python_version": "^3.8"
-	, "enable_cli": true
-	, "enable_resource_directory": true
-	, "enable_autoflake": true
-	, "enable_isort": true
-	, "enable_black": true
-	, "enable_pylint": true
-	, "enable_bandit": true
-	, "enable_mypy": true
-	, "enable_pytest": true
+	, "enable_cli": "y"
+	, "enable_resource_directory": "y"
+	, "enable_autoflake": "y"
+	, "enable_isort": "y"
+	, "enable_black": "y"
+	, "enable_pylint": "y"
+	, "enable_bandit": "y"
+	, "enable_mypy": "y"
+	, "enable_pytest": "y"
+	, "enable_codecov": "y"
 }

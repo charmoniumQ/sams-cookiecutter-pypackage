@@ -6,6 +6,7 @@ package={{cookiecutter.package_name}}
 src="./${package}"
 check=$([ "${1}" = "check" ] && echo "true" || echo "")
 verbose=${verbose:-}
+skip_lint=${skip_lint:-}
 
 function now() {
 	python -c 'import datetime; print((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())'
@@ -35,54 +36,50 @@ function capture() {
 	fi
 }
 
-# Auto formatting
+{%- if cookiecutter.enable_autoflake == "y" %}
+[[ -n "${skip_lint}" ]] || \
+	capture \
+		poetry run \
+			autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") "${src}" tests
+{%- endif %}
 
-{%- cookiecutter.autoflake -%}
-capture \
-	poetry run \
-		autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") "${src}" tests
-{%- endif -%}
+{%- if cookiecutter.enable_isort == "y" %}
+[[ -n "${skip_lint}" ]] || \
+	capture \
+		poetry run \
+			isort --recursive $([ -n "${check}" ] && echo "--check-only") "${src}" tests
+{%- endif %}
 
-{%- cookiecutter.isort -%}
-capture \
-	poetry run \
-		isort --recursive $([ -n "${check}" ] && echo "--check-only") "${src}" tests
-{%- endif -%}
+{%- if cookiecutter.enable_black == "y" %}
+[[ -n "${skip_lint}" ]] || \
+	capture \
+		poetry run \
+			black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") "${src}" tests
+{%- endif %}
 
-{%- cookiecutter.black -%}
-capture \
-	poetry run \
-		black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") "${src}" tests
-{%- endif -%}
+{%- if cookiecutter.enable_pylint == "y" %}
+[[ -n "${skip_lint}" ]] || \
+	capture \
+		poetry run \
+			sh -c "pylint ${src} tests || poetry run pylint-exit -efail ${?}"
+{%- endif %}
 
-# Linting (formatting/style tests)
-
-{%- cookiecutter.pylint -%}
-capture \
-	poetry run \
-		sh -c "pylint ${src} tests || poetry run pylint-exit -efail ${?}"
-{%- endif -%}
-
-# Static analysis
-
-{%- cookiecutter.bandit -%}
-capture \
-	poetry run \
-		env PYTHONPATH="src:${PYTHONPATH}" \
-			bandit --recursive src
-{%- endif -%}
-
-{%- cookiecutter.mypy -%}
+{%- if cookiecutter.enable_mypy == "y" %}
 capture \
 	poetry run \
 		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
 			dmypy run -- tests
-{%- endif -%}
+{%- endif %}
 
-# Unit tests
-
-{%- cookiecutter.pytest -%}
+{%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet --cov="${src}" --cov=tests --cov-report=term-missing --exitfirst
-{%- endif -%}
+		pytest --quiet {%- if cookiecutter.enable_codecov %} --cov="${src}" --cov=tests --cov-report=term-missing {%- endif %} --exitfirst
+{%- endif %}
+
+{%- if cookiecutter.enable_bandit == "y" %}
+capture \
+	poetry run \
+		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
+			bandit --recursive "${src}"
+{%- endif %}

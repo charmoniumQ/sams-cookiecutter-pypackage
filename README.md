@@ -3,7 +3,7 @@
 - [X] Resource directory
 - [ ] Valid README
 - [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
-- [ ] Contributing
+- [ ] CONTRIBUTING.md
 - [ ] Valid license
 - [ ] Formatting (black, isort flake8)
 - [ ] Static analysis (mypy, bandit, pylint)
@@ -19,3 +19,5 @@
 - [ ] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
 - [ ] Fill first commit
+- [ ] Radon code metrics
+- [ ] Wemake-Python-Styleguide

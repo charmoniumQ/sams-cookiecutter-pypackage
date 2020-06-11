@@ -5,46 +5,49 @@ description = "{{cookiecutter.description}}"
 authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
 license = "{{cookiecutter.license_name}}"
 readme = 'README.rst'
-repository = "{{ cookiecutter.repository_http_url }}"
+repository = "{{cookiecutter.repository_http_url}}"
 
-{%- cookiecutter.resource_directory -%}
+{%- if cookiecutter.enable_resource_directory == "y" %}
 include = ["res/"]
-{%- endif -%}
+{%- endif %}
 
 [tool.poetry.scripts]
-{%- if cookiecutter.enable_cli %}
-rtd = "{{cookiecutter.package_name}}.cli:main"
-{%- else -%}
-# rtd = "package.module:function"
-{%- endif -%}
+{%- if cookiecutter.enable_cli == "y" %}
+{{cookiecutter.package_name}} = "{{cookiecutter.package_name}}.cli:main"
+{%- else %}
+# script_name = "package.module:function"
+{%- endif %}
 
 [tool.poetry.dependencies]
 python = "{{cookiecutter.python_version}}"
 
 [tool.poetry.dev-dependencies]
-{%- cookiecutter.autoflake -%}
+{%- if cookiecutter.enable_autoflake == "y" %}
 autoflake = "^1.3.1"
-{%- endif -%}
-{%- cookiecutter.isort -%}
+{%- endif %}
+{%- if cookiecutter.enable_isort == "y" %}
 isort = "^4.3.21"
-{%- endif -%}
-{%- cookiecutter.black -%}
+{%- endif %}
+{%- if cookiecutter.enable_black == "y" %}
 black = "^19.10b0"
-{%- endif -%}
-{%- cookiecutter.pylint %-}
+{%- endif %}
+{%- if cookiecutter.enable_pylint == "y" %}
 pylint = "^2.5.2"
 pylint-exit = "^1.1.0"
-{%- endif -%}
-{%- cookiecutter.bandit -%}
+{%- endif %}
+{%- if cookiecutter.enable_bandit == "y" %}
 bandit = "^1.6.2"
-{%- endif -%}
-{%- cookiecutter.mypy -%}
+{%- endif %}
+{%- if cookiecutter.enable_mypy == "y" %}
 mypy = "^0.780"
-{%- endif -%}
-{%- cookiecutter.pytest -%}
+{%- endif %}
+{%- if cookiecutter.enable_pytest == "y" %}
 pytest = "^5.4.1"
+{%- endif %}
+{%- if cookiecutter.enable_codecov == "y" %}
 pytest-cov = "^2.8.1"
-{%- endif -%}
+coverage = "^5.1"
+{%- endif %}
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -2,6 +2,6 @@ import click
 
 
 @click.command()
-def main(args=None):
+def main():
     """CLI for {{cookiecutter.package_name}}."""
     return 0
