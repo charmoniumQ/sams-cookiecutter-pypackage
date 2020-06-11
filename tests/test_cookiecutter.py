@@ -111,6 +111,12 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
             print(script_test.stdout.decode())
         assert tool_present == tool_enabled, (tool, tool_present, tool_enabled)
 
+    if context["enable_pylint"] == "n":
+        assert not (proj_root / ".pylintrc").exists()
+
+    if context["enable_mypy"] == "n":
+        assert not (proj_root / "mypy.ini").exists()
+
     if context["enable_codecov"] == "y":
         assert "codecov" in read_file(proj_root / "TODO.md")
 

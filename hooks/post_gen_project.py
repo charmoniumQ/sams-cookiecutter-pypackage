@@ -29,6 +29,14 @@ if not enable_resource_directory:
     shutil.rmtree(Path(".") / "res")
 
 
+if not enable_mypy:
+    os.remove(Path(".") / "mypy.ini")
+
+
+if not enable_pylint:
+    os.remove(Path(".") / ".pylintrc")
+
+
 if enable_codecov:
     add_todo(
         f"""

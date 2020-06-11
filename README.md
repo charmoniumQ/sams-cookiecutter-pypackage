@@ -4,7 +4,7 @@
 - [ ] Valid README
 - [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
 - [ ] CONTRIBUTING.md
-- [ ] Valid license
+- [X] Valid license
 - [X] Formatting (black, isort flake8)
 - [X] Static analysis (mypy, bandit, pylint)
 - [X] Unittesting (pytest)
