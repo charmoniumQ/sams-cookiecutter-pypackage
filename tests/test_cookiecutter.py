@@ -123,6 +123,16 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     if context["license_name"].lower() == "ncsa":
         assert "NCSA" in read_file(proj_root / "LICENSE.txt")
 
+    script_test = subprocess.run(
+        ["./scripts/docs.sh"],
+        cwd=proj_root,
+        env=dict(**os.environ, verbose="true"),
+        capture_output=True,
+        check=True,
+    )
+
+    assert (proj_root / "docs" / "_build" / "index.html").exists()
+
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
     options = list(itertools.product(*spec.values()))

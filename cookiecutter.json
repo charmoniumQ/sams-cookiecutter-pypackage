@@ -5,6 +5,7 @@
 	, "repository_host": "github.com"
 	, "repository_http_url": "https://{{cookiecutter.repository_host}}/{{cookiecutter.repository_user}}/{{cookiecutter.repository_name}}.git"
 	, "repository_url": "git@github.com:{{cookiecutter.repository_user}}/{{cookiecutter.repository_name}}.git"
+	, "issue_tracker_url": "https://{{cookiecutter.repository_host}}/{{cookiecutter.repository_user}}/{{cookiecutter.repository_name}}/issues"
     , "description": "Foo's the bar"
     , "author_name": "Samuel Grayson"
 	, "author_email": "sam+dev@samgrayson.me"
@@ -22,4 +23,5 @@
 	, "enable_coverage": "y"
 	, "enable_codecov": "y"
 	, "setup_git": "y"
+	, "enable_sphinx": "y"
 }

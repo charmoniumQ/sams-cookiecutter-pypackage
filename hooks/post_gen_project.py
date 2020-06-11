@@ -14,6 +14,8 @@ repository_name = "{{cookiecutter.repository_name}}"
 license_name = "{{cookiecutter.license_name}}"
 setup_git = str("{{cookiecutter.setup_git}}") == "y"
 repository_url = "{{cookiecutter.repository_url}}"
+enable_mypy = str("{{cookiecutter.enable_mypy}}") == "y"
+enable_pylint = str("{{cookiecutter.enable_pylint}}") == "y"
 
 
 def add_todo(text: str) -> None:

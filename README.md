@@ -11,7 +11,7 @@
 - [X] Codecov (local report)
 - [ ] CI (Github or Travis?)
 - [X] CI upload codecov report
-- [ ] Sphinx prose documentation
+- [X] Sphinx prose documentation
 - [ ] Sphinx API documentation
 - [ ] Doctests
 - [ ] Documentation deploy (hook)

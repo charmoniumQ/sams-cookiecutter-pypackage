@@ -77,7 +77,7 @@ capture \
 {%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet --cov="${src}" --cov=tests --cov-report=term-missing --exitfirst
+		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" %} --cov="${src}" --cov=tests --cov-report=term-missing {% endif %}
 {%- endif %}
 
 {%- if cookiecutter.enable_bandit == "y" %}

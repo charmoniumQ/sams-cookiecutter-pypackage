@@ -43,6 +43,8 @@ mypy = "^0.780"
 {%- endif %}
 {%- if cookiecutter.enable_pytest == "y" %}
 pytest = "^5.4.1"
+{%- endif %}
+{%- if cookiecutter.enable_coverage == "y" and cookiecutter.enable_pytest == "y" %}
 pytest-cov = "^2.8.1"
 {%- endif %}
 {%- if cookiecutter.enable_coverage == "y" %}
@@ -50,6 +52,9 @@ coverage = "^5.1"
 {%- endif %}
 {%- if cookiecutter.enable_codecov == "y" %}
 codecov = "^2.1.4"
+{%- endif %}
+{%- if cookiecutter.enable_sphinx == "y" %}
+sphinx = "^3.1.0"
 {%- endif %}
 
 [build-system]
