@@ -5,16 +5,16 @@
 - [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
 - [ ] CONTRIBUTING.md
 - [ ] Valid license
-- [ ] Formatting (black, isort flake8)
-- [ ] Static analysis (mypy, bandit, pylint)
-- [ ] Unittesting (pytest)
-- [ ] Codecov (local report)
+- [X] Formatting (black, isort flake8)
+- [X] Static analysis (mypy, bandit, pylint)
+- [X] Unittesting (pytest)
+- [X] Codecov (local report)
 - [ ] CI (Github or Travis?)
-- [ ] CI upload codecov report
+- [X] CI upload codecov report
 - [ ] Sphinx prose documentation
 - [ ] Sphinx API documentation
 - [ ] Doctests
-- [ ] Documentatoin deploy (hook)
+- [ ] Documentation deploy (hook)
 - [ ] Version management (bumpversion or punch?)
 - [ ] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/

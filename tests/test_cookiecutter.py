@@ -1,12 +1,12 @@
 import itertools
+import os
 import subprocess
 import tempfile
-import os
 from pathlib import Path
 from typing import Iterable, List, Mapping, TypeVar
-from tqdm import tqdm
 
 from cookiecutter.main import cookiecutter
+from tqdm import tqdm
 
 T = TypeVar("T")
 V = TypeVar("V")
@@ -26,7 +26,17 @@ def test_cookiecutter() -> None:
             verify(out_dir, context)
 
 
-tools = ["autoflake", "isort", "black", "pylint", "bandit", "mypy", "pytest"]
+tools = [
+    "autoflake",
+    "isort",
+    "black",
+    "pylint",
+    "bandit",
+    "mypy",
+    "pytest",
+    "coverage",
+    "codecov",
+]
 
 
 context_spec: Mapping[str, List[str]] = {
@@ -35,7 +45,8 @@ context_spec: Mapping[str, List[str]] = {
     "enable_cli": ["y", "n"],
     "enable_resource_directory": ["y", "n"],
     **{
-        f"enable_{option}": ["y", "n"]
+        f"enable_{option}": ["y"]
+        # f"enable_{option}": ["y", "n"]
         for option in tools
     },
 }
@@ -45,24 +56,16 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     proj_root = out_dir / context["repository_name"]
 
     subprocess.run(
-        ["poetry", "check"],
-        cwd=proj_root,
-        check=True,
-        capture_output=True,
+        ["poetry", "check"], cwd=proj_root, check=True, capture_output=True,
     )
 
     subprocess.run(
-        ["poetry", "install"],
-        cwd=proj_root,
-        check=True,
-        capture_output=True,
+        ["poetry", "install"], cwd=proj_root, check=True, capture_output=True,
     )
 
     if context["enable_cli"] == "y":
         subprocess.run(
-            ["poetry", "run", context["package_name"]],
-            cwd=proj_root,
-            check=True,
+            ["poetry", "run", context["package_name"]], cwd=proj_root, check=True,
         )
         # TODO: assert package_name on the path in install
     else:
@@ -74,6 +77,7 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     else:
         assert not (proj_root / "res").exists()
 
+    # pylint: disable=subprocess-run-check
     script_test = subprocess.run(
         ["./scripts/test.sh"],
         cwd=proj_root,
@@ -87,14 +91,19 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         assert script_test.returncode == 0
 
     for tool in tools:
-        assert (context[f"enable_{tool}"] == "y") == \
-            (tool.encode() in script_test.stdout)
+        assert (context[f"enable_{tool}"] == "y") == (
+            tool.encode() in script_test.stdout
+        )
+
+    if context["enable_codecov"] == "y":
+        with (proj_root / "TODO.md").open("r") as todos:
+            assert "codecov" in todos.read()
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
-    for values_choice in tqdm(list(itertools.product(*spec.values()))[3::65]):
+    for values_choice in tqdm(list(itertools.product(*spec.values()))):
         yield dict(zip(spec.keys(), values_choice))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_cookiecutter()

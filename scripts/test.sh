@@ -41,20 +41,20 @@ function capture() {
 		poetry run \
 			autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") "${src}" tests
 
-[[ -z "${skip_lint}" ]] || \
+[[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
 			isort --recursive $([ -n "${check}" ] && echo "--check-only") "${src}" tests
 
-[[ -z "${skip_lint}" ]] || \
+[[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
 			black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") "${src}" tests
 
-[[ -z "${skip_lint}" ]] || \
+[[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			sh -c "pylint ${src} tests || poetry run pylint-exit -efail ${?}"
+			sh -c "pylint ${src} tests || poetry run pylint-exit -efail \${?} > /dev/null"
 
 capture \
 	poetry run \
@@ -63,4 +63,4 @@ capture \
 
 capture \
 	poetry run \
-		pytest --quiet --exitfirst tests
+		pytest -vvv --quiet --exitfirst tests

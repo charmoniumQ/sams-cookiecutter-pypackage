@@ -203,6 +203,18 @@ pylev = ">=1.3,<2.0"
 
 [[package]]
 category = "dev"
+description = "Hosted coverage reports for GitHub, Bitbucket and Gitlab"
+name = "codecov"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.1.4"
+
+[package.dependencies]
+coverage = "*"
+requests = ">=2.7.9"
+
+[[package]]
+category = "dev"
 description = "Cross-platform colored terminal text."
 marker = "sys_platform == \"win32\" or platform_system == \"Windows\""
 name = "colorama"
@@ -831,7 +843,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "390db02738a3cccbd2c13226c03dfb32d4cdc20024dee961d3dcfd3738ab3199"
+content-hash = "ef29260fe41813b24896c1f97b69c6d5820d12b8fcdb26d954b32156041795a7"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -926,6 +938,11 @@ click = [
 clikit = [
     {file = "clikit-0.4.3-py2.py3-none-any.whl", hash = "sha256:71e321b7795a2a6c4888629f43365d52db071737e668ab16861121d7dd3ada09"},
     {file = "clikit-0.4.3.tar.gz", hash = "sha256:6e2d7e115e7c7b35bceb0209109935ab2f9ab50910e9ff2293f7fa0b7abf973e"},
+]
+codecov = [
+    {file = "codecov-2.1.4-py2.py3-none-any.whl", hash = "sha256:7378c4bec1809dde64031bf7d76c95266b0e6d60cfcd1d6a16ce96bfb6360ac3"},
+    {file = "codecov-2.1.4-py3.8.egg", hash = "sha256:24c24a7c8d1231b83729c7a2a33655ce472a3ba05e0111d52701e3e3075657c9"},
+    {file = "codecov-2.1.4.tar.gz", hash = "sha256:bf30a41f65e747b159e2a749d1f9c92042d358bba0905fd94d3def3a368e592c"},
 ]
 colorama = [
     {file = "colorama-0.4.3-py2.py3-none-any.whl", hash = "sha256:7d73d2a99753107a36ac6b455ee49046802e59d9d076ef8e47b61499fa29afff"},

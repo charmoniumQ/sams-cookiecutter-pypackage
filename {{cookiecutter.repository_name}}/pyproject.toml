@@ -43,10 +43,13 @@ mypy = "^0.780"
 {%- endif %}
 {%- if cookiecutter.enable_pytest == "y" %}
 pytest = "^5.4.1"
+pytest-cov = "^2.8.1"
+{%- endif %}
+{%- if cookiecutter.enable_coverage == "y" %}
+coverage = "^5.1"
 {%- endif %}
 {%- if cookiecutter.enable_codecov == "y" %}
-pytest-cov = "^2.8.1"
-coverage = "^5.1"
+codecov = "^2.1.4"
 {%- endif %}
 
 [build-system]

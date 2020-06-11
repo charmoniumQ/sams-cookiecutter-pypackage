@@ -2,11 +2,14 @@
 
 cd "$(dirname "${0}")/.."
 
-package={{cookiecutter.package_name}}
-src="./${package}"
-check=$([ "${1}" = "check" ] && echo "true" || echo "")
+check=${check:-}
 verbose=${verbose:-}
 skip_lint=${skip_lint:-}
+htmlcov=${htmlcov:-}
+codecov=${codecov:-}
+
+package={{cookiecutter.package_name}}
+src="./${package}"
 
 function now() {
 	python -c 'import datetime; print((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())'
@@ -61,7 +64,7 @@ function capture() {
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			sh -c "pylint ${src} tests || poetry run pylint-exit -efail ${?}"
+			sh -c "pylint ${src} tests || poetry run pylint-exit -efail \${?} > /dev/null"
 {%- endif %}
 
 {%- if cookiecutter.enable_mypy == "y" %}
@@ -74,7 +77,7 @@ capture \
 {%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet {%- if cookiecutter.enable_codecov %} --cov="${src}" --cov=tests --cov-report=term-missing {%- endif %} --exitfirst
+		pytest --quiet --cov="${src}" --cov=tests --cov-report=term-missing --exitfirst
 {%- endif %}
 
 {%- if cookiecutter.enable_bandit == "y" %}
@@ -82,4 +85,19 @@ capture \
 	poetry run \
 		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
 			bandit --recursive "${src}"
+{%- endif %}
+
+{%- if cookiecutter.enable_coverage == "y" %}
+capture \
+	poetry run \
+		coverage html -d htmlcov
+if [[ -n "${htmlcov}" ]]; then
+	xdg-open htmlcov/index.html
+fi
+{%- endif %}
+
+{%- if cookiecutter.enable_codecov == "y" %}
+capture \
+	poetry run \
+		codecov
 {%- endif %}
