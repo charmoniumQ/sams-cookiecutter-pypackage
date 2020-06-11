@@ -1,62 +1,100 @@
 import itertools
 import subprocess
 import tempfile
+import os
 from pathlib import Path
-from typing import Iterable, List, Mapping, TypeVar, Union
+from typing import Iterable, List, Mapping, TypeVar
+from tqdm import tqdm
 
 from cookiecutter.main import cookiecutter
 
-POD = Union[bool, int, float, str]
 T = TypeVar("T")
 V = TypeVar("V")
 project_root = Path(__file__).parent.parent
 
 
-def test_template() -> None:
+def test_cookiecutter() -> None:
     for context in expand(context_spec):
-        with tempfile.TemporaryDirectory() as dirf_str:
-            dirf = Path(dirf_str)
+        with tempfile.TemporaryDirectory() as out_dir_str:
+            out_dir = Path(out_dir_str)
             cookiecutter(
                 str(project_root),
                 no_input=True,
                 extra_context=context,
-                output_dir=dirf,
+                output_dir=str(out_dir),
             )
-            verify(dirf, context)
+            verify(out_dir, context)
 
 
-context_spec: Mapping[str, List[POD]] = {
+tools = ["autoflake", "isort", "black", "pylint", "bandit", "mypy", "pytest"]
+
+
+context_spec: Mapping[str, List[str]] = {
     "package_name": ["nameless"],
-    "enable_cli": [True, False],
-    "enable_resource_directory": [True, False],
-    "enable_autoflake": [True, False],
+    "repository_name": ["nameless"],
+    "enable_cli": ["y", "n"],
+    "enable_resource_directory": ["y", "n"],
+    **{
+        f"enable_{option}": ["y", "n"]
+        for option in tools
+    },
 }
 
 
-def verify(dirf: Path, context: Mapping[str, POD]) -> None:
-    if context["enable_cli"]:
-        subprocess.run(["poetry", "run", context["package_name"]], cwd=dirf)
+def verify(out_dir: Path, context: Mapping[str, str]) -> None:
+    proj_root = out_dir / context["repository_name"]
+
+    subprocess.run(
+        ["poetry", "check"],
+        cwd=proj_root,
+        check=True,
+        capture_output=True,
+    )
+
+    subprocess.run(
+        ["poetry", "install"],
+        cwd=proj_root,
+        check=True,
+        capture_output=True,
+    )
+
+    if context["enable_cli"] == "y":
+        subprocess.run(
+            ["poetry", "run", context["package_name"]],
+            cwd=proj_root,
+            check=True,
+        )
         # TODO: assert package_name on the path in install
     else:
-        assert not (dirf / context["package_name"] / "cli.py").exists()
+        assert not (proj_root / context["package_name"] / "cli.py").exists()
 
-    if context["enable_resource_directory"]:
+    if context["enable_resource_directory"] == "y":
         # TODO: assert resource dir exists in install
         pass
     else:
-        assert not (dirf / "res").exists()
+        assert not (proj_root / "res").exists()
 
-    script_test_output = subprocess.run(
+    script_test = subprocess.run(
         ["./scripts/test.sh"],
-        cwd=dirf,
-        env=dict(verbose="true"),
-        capture_output=True
-    ).stdout
+        cwd=proj_root,
+        env=dict(**os.environ, verbose="true"),
+        capture_output=True,
+    )
 
-    for tool in ["autoflake", "isort", "black", "pylint", "bandit", "mypy", "pytest"]:
-        assert context[f"enable_{tool}"] == (tool in script_test_output)
+    if script_test.returncode != 0:
+        # when check fails, give me a chance to see stdout
+        print(script_test.stdout.decode())
+        assert script_test.returncode == 0
+
+    for tool in tools:
+        assert (context[f"enable_{tool}"] == "y") == \
+            (tool.encode() in script_test.stdout)
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
-    for values_choice in itertools.product(*spec.values()):
+    for values_choice in tqdm(list(itertools.product(*spec.values()))[3::65]):
         yield dict(zip(spec.keys(), values_choice))
+
+
+if __name__ == '__main__':
+    test_cookiecutter()
