@@ -20,4 +20,5 @@
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
 - [ ] Fill first commit
 - [ ] Radon code metrics
+- [ ] Mypy Stubs (mypy_path and linting too)
 - [ ] Wemake-Python-Styleguide
