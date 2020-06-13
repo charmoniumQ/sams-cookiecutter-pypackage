@@ -89,5 +89,3 @@ if initial_commit:
         capture_output=True,
     )
     # Allow user to poke around before pushing
-else:
-    add_todo("- [ ] Setup version control system (like Git).")

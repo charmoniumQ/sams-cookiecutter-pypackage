@@ -13,7 +13,7 @@ include = ["res/"]
 
 [tool.poetry.scripts]
 {%- if cookiecutter.enable_cli == "y" %}
-{{cookiecutter.package_name}} = "{{cookiecutter.package_name}}.cli:main"
+{{cookiecutter.package_name}} = "{{cookiecutter.package_name}}._cli:main"
 {%- else %}
 # script_name = "package.module:function"
 {%- endif %}
@@ -55,6 +55,8 @@ codecov = "^2.1.4"
 {%- endif %}
 {%- if cookiecutter.enable_sphinx == "y" %}
 sphinx = "^3.1.0"
+sphinx-autoapi = "^1.4.0"
+sphinx-autodoc-annotation = "^1.0-1"
 {%- endif %}
 
 [build-system]

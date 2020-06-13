@@ -1,6 +1,6 @@
 import click
 
-from .lib import returns_four
+from ._lib import returns_four
 
 
 @click.command()

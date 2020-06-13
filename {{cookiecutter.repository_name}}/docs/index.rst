@@ -1,18 +1,13 @@
-{% for _ in cookiecutter.repository_name %}={% endfor %}
-{{cookiecutter.repository_name}}
-{% for _ in cookiecutter.repository_name %}={% endfor %}
-
 .. include:: ../README.rst
 
 .. toctree::
    :maxdepth: 2
 
    installation
+   autoapi/index
    contributing
    authors
 
-..   modules
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
