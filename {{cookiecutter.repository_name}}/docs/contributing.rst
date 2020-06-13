@@ -50,14 +50,12 @@ Fix Bugs and Implementing Features
      safely ignored in this project; However, I like keeping the code
      clean where possible. `mypy`_ should rarely be ignored or overriden.
 
-    * ``skip_lint=true ./scripts/test.sh`` will go straight to the
-      static analysis and unittests, saving a second or two.
+   * ``skip_lint=true ./scripts/test.sh`` will go straight to the
+     static analysis and unittests, saving a second or two.
 
-    * Check the code-coverage emitted by ``./scripts/test.sh``. As a
-      shortcut, ``htmlcov=true ./scripts/test.sh`` will open the
-      coverage HTML report in your browser.
-
-    * In a similar vein, 
+   * Check the code-coverage emitted by ``./scripts/test.sh``. As a
+     shortcut, ``htmlcov=true ./scripts/test.sh`` will open the
+     coverage HTML report in your browser.
 
 6. When those pass, submit a pull-request.
 

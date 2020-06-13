@@ -1,9 +1,8 @@
 - [X] Dependency management with Poetry
 - [X] CLI (click)
 - [X] Resource directory
-- [ ] Valid README
+- [ ] Valid README, CONTRIBUTING.md (copied from docs)
 - [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
-- [ ] CONTRIBUTING.md
 - [X] Valid license
 - [X] Formatting (black, isort flake8)
 - [X] Static analysis (mypy, bandit, pylint)
@@ -18,7 +17,7 @@
 - [ ] Version management (bumpversion or punch?)
 - [ ] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
-- [ ] Fill first commit
+- [X] Fill first commit
 - [ ] Radon code metrics
 - [ ] Mypy Stubs (mypy_path and linting too)
 - [ ] Wemake-Python-Styleguide

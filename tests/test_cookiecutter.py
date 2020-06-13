@@ -1,14 +1,14 @@
 import itertools
+import sys
 import os
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Iterable, List, Mapping, TypeVar
+from typing import Iterable, List, Mapping, TypeVar, Dict, Any, TYPE_CHECKING
 
 import pytest
 from cookiecutter.exceptions import CookiecutterException
 from cookiecutter.main import cookiecutter
-from tqdm import tqdm
 
 T = TypeVar("T")
 V = TypeVar("V")
@@ -60,22 +60,42 @@ context_spec: Mapping[str, List[str]] = {
     "enable_resource_directory": ["y", "n"],
     "license_name": ["NCSA"],
     **{f"enable_{option}": ["y", "n"] for option in tools},
+    "enable_sphinx": ["y", "n"],
 }
+
+
+if TYPE_CHECKING:
+    spcp = subprocess.CompletedProcess[bytes]
+else:
+    spcp = subprocess.CompletedProcess
+
+def subprocess_run(cmd: List[str], **kwargs: Any) -> spcp:
+    try:
+        return subprocess.run(cmd, **kwargs)
+    except subprocess.CalledProcessError as err:
+        bar = '-' * 40
+        print(f'{bar} stdout {bar}')
+        sys.stdout.buffer.write(err.stdout)
+        print(f'{bar}--------{bar}')
+        print(f'{bar} stderr {bar}')
+        sys.stdout.buffer.write(err.stderr)
+        print(f'{bar}--------{bar}')
+        raise err
 
 
 def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     proj_root = out_dir / context["repository_name"]
 
-    subprocess.run(
+    subprocess_run(
         ["poetry", "check"], cwd=proj_root, check=True,
     )
 
-    subprocess.run(
+    subprocess_run(
         ["poetry", "install"], cwd=proj_root, check=True, capture_output=True,
     )
 
     if context["enable_cli"] == "y":
-        subprocess.run(
+        subprocess_run(
             ["poetry", "run", context["package_name"]], cwd=proj_root, check=True,
         )
     else:
@@ -87,18 +107,13 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     else:
         assert not (proj_root / "res").exists()
 
-    try:
-        script_test = subprocess.run(
-            ["./scripts/test.sh"],
-            cwd=proj_root,
-            env=dict(**os.environ, verbose="true"),
-            capture_output=True,
-            check=True,
-        )
-    except subprocess.CalledProcessError as err:
-        print(err.stdout)
-        print(err.stderr)
-        raise err
+    script_test = subprocess_run(
+        ["./scripts/test.sh"],
+        cwd=proj_root,
+        env=dict(**os.environ, verbose="true"),
+        capture_output=True,
+        check=True,
+    )
 
     for tool in tools:
         tool_enabled = context[f"enable_{tool}"] == "y"
@@ -123,15 +138,18 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     if context["license_name"].lower() == "ncsa":
         assert "NCSA" in read_file(proj_root / "LICENSE.txt")
 
-    script_test = subprocess.run(
-        ["./scripts/docs.sh"],
-        cwd=proj_root,
-        env=dict(**os.environ, verbose="true"),
-        capture_output=True,
-        check=True,
-    )
-
-    assert (proj_root / "docs" / "_build" / "index.html").exists()
+    if context["enable_sphinx"] == "y":
+        script_test = subprocess_run(
+            ["./scripts/docs.sh"],
+            cwd=proj_root,
+            env=dict(**os.environ, verbose="true"),
+            capture_output=True,
+            check=True,
+        )
+        assert (proj_root / "docs" / "_build" / "index.html").exists()
+    else:
+        assert not (proj_root / "docs").exists()
+        assert not (proj_root / "scripts" / "docs.sh").exists()
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
@@ -139,8 +157,8 @@ def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
     # test first, last, and some in between
     # Usually, these options to not "interfere" with each other
     # So no need to test each possible configuration (exponential)
-    some_options = [options[0], options[-1], *options[1:-1:257]]
-    for values_choice in tqdm(some_options):
+    some_options = [options[0], options[-1], *random.sample(options, 2)]
+    for values_choice in some_options:
         yield dict(zip(spec.keys(), values_choice))
 
 

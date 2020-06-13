@@ -2,7 +2,7 @@
 {{cookiecutter.repository_name}}
 {% for _ in cookiecutter.repository_name %}={% endfor %}
 
-.. include:: /readme.rst
+.. include:: ../README.rst
 
 .. toctree::
    :maxdepth: 2

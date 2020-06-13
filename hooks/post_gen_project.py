@@ -16,6 +16,7 @@ setup_git = str("{{cookiecutter.setup_git}}") == "y"
 repository_url = "{{cookiecutter.repository_url}}"
 enable_mypy = str("{{cookiecutter.enable_mypy}}") == "y"
 enable_pylint = str("{{cookiecutter.enable_pylint}}") == "y"
+enable_sphinx = str("{{cookiecutter.enable_sphinx}}") == "y"
 
 
 def add_todo(text: str) -> None:
@@ -51,8 +52,9 @@ if enable_codecov:
     )
 
 
-if not setup_git:
-    add_todo("- [ ] Setup version control system (like Git).")
+if not enable_sphinx:
+    shutil.rmtree("docs/")
+    os.remove("scripts/docs.sh")
 
 
 url = f"https://github.com/spdx/license-list-data/blob/master/text/{license_name.upper()}.txt"
@@ -69,11 +71,18 @@ else:
 
 
 if setup_git:
-    subprocess.run(["git", "init"], check=True)
-    subprocess.run(["git", "remote", "add", "origin", repository_url], check=True)
-    subprocess.run(["git", "add", "-A"], check=True)
+    subprocess.run(["git", "init"], check=True, capture_output=True)
+    subprocess.run(
+        ["git", "remote", "add", "origin", repository_url],
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(["git", "add", "-A"], check=True, capture_output=True)
     subprocess.run(
         ["git", "commit", "-m", "Iniital commit (with sams-cookiecutter-pypackage)"],
         check=True,
+        capture_output=True,
     )
     # Allow user to poke around before pushing
+else:
+    add_todo("- [ ] Setup version control system (like Git).")
