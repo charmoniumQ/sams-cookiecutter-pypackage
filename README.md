@@ -1,7 +1,7 @@
 - [X] Dependency management with Poetry
 - [X] CLI (click)
 - [X] Resource directory
-- [ ] Valid README, CONTRIBUTING.md (copied from docs)
+- [x] Valid README
 - [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
 - [X] Valid license
 - [X] Formatting (black, isort flake8)

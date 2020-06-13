@@ -6,7 +6,9 @@ check=${check:-}
 verbose=${verbose:-}
 skip_lint=${skip_lint:-}
 htmlcov=${htmlcov:-}
+{%- if cookiecutter.enable_codecov == "y" %}
 codecov=${codecov:-}
+{%- endif %}
 
 package={{cookiecutter.package_name}}
 src="./${package}"
@@ -77,7 +79,7 @@ capture \
 {%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" %} --cov="${src}" --cov=tests --cov-report=term-missing {% endif %}
+		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${src}" --cov=tests --cov-report=term-missing {% endif %}
 {%- endif %}
 
 {%- if cookiecutter.enable_bandit == "y" %}
@@ -86,14 +88,15 @@ capture \
 		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
 			bandit --recursive "${src}"
 {%- endif %}
+{%- if cookiecutter.enable_coverage %}
+[[ -z "${htmlcov}" ]] || \
+	xdg-open htmlcov/index.html
+{%- endif %}
 
 {%- if cookiecutter.enable_coverage == "y" %}
-capture \
+[[ -z "${CODECOV_TOKEN}" ]] || \
 	poetry run \
 		coverage html -d htmlcov
-if [[ -n "${htmlcov}" ]]; then
-	xdg-open htmlcov/index.html
-fi
 {%- endif %}
 
 {%- if cookiecutter.enable_codecov == "y" %}

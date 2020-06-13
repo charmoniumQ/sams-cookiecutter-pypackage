@@ -62,12 +62,15 @@ confidence=
 # --disable=W".
 disable=
     missing-docstring,
+
+	# This is needed to make mypy types work (such as OrderedDict[K, V])
+    unsubscriptable-object,
+
     # my personal style is to explicitly else-return and else-raise.
     # that way, if you change the return or raise, same functionality
     no-else-raise,
     no-else-return,
-    no-else-continue,
-    bad-continuation
+    no-else-continue
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

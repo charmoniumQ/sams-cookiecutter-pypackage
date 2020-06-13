@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import itertools
-import sys
 import os
+import random
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
-from typing import Iterable, List, Mapping, TypeVar, Dict, Any, TYPE_CHECKING
+from typing import Any, Iterable, List, Mapping, TypeVar
 
 import pytest
 from cookiecutter.exceptions import CookiecutterException
@@ -48,8 +51,6 @@ tools = [
     "bandit",
     "mypy",
     "pytest",
-    "coverage",
-    "codecov",
 ]
 
 
@@ -61,25 +62,22 @@ context_spec: Mapping[str, List[str]] = {
     "license_name": ["NCSA"],
     **{f"enable_{option}": ["y", "n"] for option in tools},
     "enable_sphinx": ["y", "n"],
+    "enable_codecov": ["y", "n"],
+    "enable_coverage": ["y", "n"],
 }
 
 
-if TYPE_CHECKING:
-    spcp = subprocess.CompletedProcess[bytes]
-else:
-    spcp = subprocess.CompletedProcess
-
-def subprocess_run(cmd: List[str], **kwargs: Any) -> spcp:
+def subprocess_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess[bytes]:
     try:
-        return subprocess.run(cmd, **kwargs)
+        return subprocess.run(cmd, check=True, capture_output=True, **kwargs)
     except subprocess.CalledProcessError as err:
-        bar = '-' * 40
-        print(f'{bar} stdout {bar}')
+        hbar = "-" * 40
+        print(f"{hbar} stdout {hbar}")
         sys.stdout.buffer.write(err.stdout)
-        print(f'{bar}--------{bar}')
-        print(f'{bar} stderr {bar}')
+        print(f"{hbar}--------{hbar}")
+        print(f"{hbar} stderr {hbar}")
         sys.stdout.buffer.write(err.stderr)
-        print(f'{bar}--------{bar}')
+        print(f"{hbar}--------{hbar}")
         raise err
 
 
@@ -87,16 +85,16 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     proj_root = out_dir / context["repository_name"]
 
     subprocess_run(
-        ["poetry", "check"], cwd=proj_root, check=True,
+        ["poetry", "check"], cwd=proj_root,
     )
 
     subprocess_run(
-        ["poetry", "install"], cwd=proj_root, check=True, capture_output=True,
+        ["poetry", "install"], cwd=proj_root,
     )
 
     if context["enable_cli"] == "y":
         subprocess_run(
-            ["poetry", "run", context["package_name"]], cwd=proj_root, check=True,
+            ["poetry", "run", context["package_name"]], cwd=proj_root,
         )
     else:
         assert not (proj_root / context["package_name"] / "cli.py").exists()
@@ -108,11 +106,7 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         assert not (proj_root / "res").exists()
 
     script_test = subprocess_run(
-        ["./scripts/test.sh"],
-        cwd=proj_root,
-        env=dict(**os.environ, verbose="true"),
-        capture_output=True,
-        check=True,
+        ["./scripts/test.sh"], cwd=proj_root, env=dict(**os.environ, verbose="true"),
     )
 
     for tool in tools:
@@ -125,6 +119,18 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         if tool_present != tool_enabled:
             print(script_test.stdout.decode())
         assert tool_present == tool_enabled, (tool, tool_present, tool_enabled)
+
+    assert (context["enable_codecov"] == "y") == (
+        "codecov" in read_file(proj_root / "scripts" / "test.sh")
+    )
+    assert (context["enable_coverage"] == "y") == (
+        "coverage" in read_file(proj_root / "scripts" / "test.sh")
+    )
+
+    if (
+        context["enable_codecov"] == "y" or context["enable_coverage"] == "y"
+    ) and context["enable_pytest"] == "y":
+        assert "--cov" in script_test.stdout.decode()
 
     if context["enable_pylint"] == "n":
         assert not (proj_root / ".pylintrc").exists()
@@ -143,8 +149,6 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
             ["./scripts/docs.sh"],
             cwd=proj_root,
             env=dict(**os.environ, verbose="true"),
-            capture_output=True,
-            check=True,
         )
         assert (proj_root / "docs" / "_build" / "index.html").exists()
     else:
