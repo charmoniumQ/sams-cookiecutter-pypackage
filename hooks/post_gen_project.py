@@ -12,7 +12,7 @@ enable_codecov = str("{{cookiecutter.enable_codecov}}") == "y"
 repository_user = "{{cookiecutter.repository_user}}"
 repository_name = "{{cookiecutter.repository_name}}"
 license_name = "{{cookiecutter.license_name}}"
-setup_git = str("{{cookiecutter.setup_git}}") == "y"
+initial_commit = str("{{cookiecutter.initial_commit}}") == "y"
 repository_url = "{{cookiecutter.repository_url}}"
 enable_mypy = str("{{cookiecutter.enable_mypy}}") == "y"
 enable_pylint = str("{{cookiecutter.enable_pylint}}") == "y"
@@ -70,7 +70,7 @@ else:
     add_todo("- [ ] Fill copyright informaiton into license (if necessary).")
 
 
-if setup_git:
+if initial_commit:
     subprocess.run(["git", "init"], check=True, capture_output=True)
     subprocess.run(
         ["git", "remote", "add", "origin", repository_url],
@@ -79,7 +79,12 @@ if setup_git:
     )
     subprocess.run(["git", "add", "-A"], check=True, capture_output=True)
     subprocess.run(
-        ["git", "commit", "-m", "Iniital commit (with sams-cookiecutter-pypackage)"],
+        [
+            "git",
+            "commit",
+            "-m",
+            "Iniital commit (with [sams-cookiecutter-pypackage])\n\n[1]: https://github.com/charmoniumQ/sams-cookiecutter-pypackage\n",
+        ],
         check=True,
         capture_output=True,
     )

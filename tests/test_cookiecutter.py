@@ -64,6 +64,7 @@ context_spec: Mapping[str, List[str]] = {
     "enable_sphinx": ["y", "n"],
     "enable_codecov": ["y", "n"],
     "enable_coverage": ["y", "n"],
+    "initial_commit": ["y"],
 }
 
 
@@ -140,6 +141,9 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     else:
         assert not (proj_root / "docs").exists()
         assert not (proj_root / "scripts" / "docs.sh").exists()
+
+    if context["initial_commit"] == "y":
+        assert subprocess_run(["git", "status", "porcelain"])
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
