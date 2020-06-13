@@ -11,7 +11,11 @@ codecov=${codecov:-}
 {%- endif %}
 
 package={{cookiecutter.package_name}}
-src="./${package}"
+package_loc=$(dirname "${PWD}/${package}")
+other_srcs="tests/"
+{%- if cookiecutter.enable_sphinx == "y" %}
+other_srcs="${other_srcs} docs/conf.py"
+{%- endif %}
 
 function now() {
 	python -c 'import datetime; print((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())'
@@ -41,66 +45,76 @@ function capture() {
 	fi
 }
 
-{%- if cookiecutter.enable_autoflake == "y" %}
+flag_verbose_or_quiet=$([ -n "${verbose}" ] && echo "--verbose" || echo "--quiet")
+flag_verbose=$([ -n "${verbose}" ] && echo "--verbose")
+flag_check_or_in_place=$([ -n "${check}" ] && echo "--check" || echo "--in-place")
+flag_check_only=$([ -n "${check}" ] && echo "--check-only")
+flag_check=$([ -n "${check}" ] && echo "--check")
+
+{% if cookiecutter.enable_autoflake == "y" %}
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") "${src}" tests
-{%- endif %}
+			autoflake --recursive ${flag_check_or_in_place} "${package}" ${other_srcs}
+{% endif %}
 
 {%- if cookiecutter.enable_isort == "y" %}
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			isort --recursive $([ -n "${check}" ] && echo "--check-only") "${src}" tests
-{%- endif %}
+			isort --recursive ${flag_check_only} "${package}"
+# I can't enable isort in tests because mocking requires a specific import-order
+{% endif %}
 
 {%- if cookiecutter.enable_black == "y" %}
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") "${src}" tests
-{%- endif %}
+			black --quiet --target-version py38 ${flag_check} ${flag_verbose_or_quiet} "${package}" ${other_srcs}
+{% endif %}
 
 {%- if cookiecutter.enable_pylint == "y" %}
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			sh -c "pylint ${src} tests || poetry run pylint-exit -efail \${?} > /dev/null"
-{%- endif %}
+			sh -c "pylint ${flag_verbose} ${package} ${other_srcs} || poetry run pylint-exit -efail \${?} > /dev/null"
+{% endif %}
 
 {%- if cookiecutter.enable_mypy == "y" %}
 capture \
 	poetry run \
-		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
-			dmypy run -- tests
-{%- endif %}
+		env PYTHONPATH="${package_loc}:${PYTHONPATH}" \
+			dmypy run -- ${flag_verbose} ${other_srcs} $(find "${package}" -name '*.py')
+{% endif %}
 
 {%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${src}" --cov=tests --cov-report=term-missing {% endif %}
-{%- endif %}
+		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${package}" --cov-report=term-missing {% endif %}
+# I only care about coverage in the exported package
+{% endif %}
 
 {%- if cookiecutter.enable_bandit == "y" %}
 capture \
 	poetry run \
-		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" \
-			bandit --recursive "${src}"
-{%- endif %}
+		env PYTHONPATH="${package_loc}:${PYTHONPATH}" \
+			bandit --recursive ${flag_verbose_or_quiet} "${package}"
+# I only care about vulns in the exported package
+{% endif %}
+
 {%- if cookiecutter.enable_coverage %}
 [[ -z "${htmlcov}" ]] || \
 	xdg-open htmlcov/index.html
-{%- endif %}
+{% endif %}
 
 {%- if cookiecutter.enable_coverage == "y" %}
-[[ -z "${CODECOV_TOKEN}" ]] || \
-	poetry run \
-		coverage html -d htmlcov
-{%- endif %}
+poetry run \
+	coverage html -d htmlcov
+{% endif %}
 
 {%- if cookiecutter.enable_codecov == "y" %}
-capture \
-	poetry run \
-		codecov
-{%- endif %}
+[[ -z "${CODECOV_TOKEN}" ]] || \
+	capture \
+		poetry run \
+			codecov
+{% endif %}

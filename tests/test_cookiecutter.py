@@ -67,20 +67,6 @@ context_spec: Mapping[str, List[str]] = {
 }
 
 
-def subprocess_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess[bytes]:
-    try:
-        return subprocess.run(cmd, check=True, capture_output=True, **kwargs)
-    except subprocess.CalledProcessError as err:
-        hbar = "-" * 40
-        print(f"{hbar} stdout {hbar}")
-        sys.stdout.buffer.write(err.stdout)
-        print(f"{hbar}--------{hbar}")
-        print(f"{hbar} stderr {hbar}")
-        sys.stdout.buffer.write(err.stderr)
-        print(f"{hbar}--------{hbar}")
-        raise err
-
-
 def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     proj_root = out_dir / context["repository_name"]
 
@@ -164,6 +150,20 @@ def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
     some_options = [options[0], options[-1], *random.sample(options, 2)]
     for values_choice in some_options:
         yield dict(zip(spec.keys(), values_choice))
+
+
+def subprocess_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess[bytes]:
+    try:
+        return subprocess.run(cmd, check=True, capture_output=True, **kwargs)
+    except subprocess.CalledProcessError as err:
+        hbar = "-" * 40
+        print(f"{hbar} stdout {hbar}")
+        sys.stdout.buffer.write(err.stdout)
+        print(f"{hbar}--------{hbar}")
+        print(f"{hbar} stderr {hbar}")
+        sys.stdout.buffer.write(err.stderr)
+        print(f"{hbar}--------{hbar}")
+        raise err
 
 
 def read_file(file_name: Path) -> str:

@@ -1,7 +1,9 @@
 import click
 
+from .lib import returns_four
+
 
 @click.command()
-def main():
+def main() -> None:
     """CLI for {{cookiecutter.package_name}}."""
-    return 0
+    print(returns_four())
