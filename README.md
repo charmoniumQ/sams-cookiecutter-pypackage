@@ -2,7 +2,7 @@
 - [X] CLI (click)
 - [X] Resource directory
 - [x] Valid README
-- [ ] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
+- [x] Code of conduct (https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md)
 - [X] Valid license
 - [X] Formatting (black, isort flake8)
 - [X] Static analysis (mypy, bandit, pylint)
@@ -11,7 +11,8 @@
 - [ ] CI (Github or Travis?)
 - [X] CI upload codecov report
 - [X] Sphinx prose documentation
-- [ ] Sphinx API documentation
+- [x] Sphinx API documentation
+- [ ] Improve API docs (intersphinx, view code, types in description)
 - [ ] Doctests
 - [ ] Documentation deploy (hook)
 - [ ] Version management (bumpversion or punch?)
@@ -21,3 +22,4 @@
 - [ ] Radon code metrics
 - [ ] Mypy Stubs (mypy_path and linting too)
 - [ ] Wemake-Python-Styleguide
+- [ ] JSON options

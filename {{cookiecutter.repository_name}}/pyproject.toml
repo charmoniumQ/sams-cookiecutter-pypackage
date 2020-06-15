@@ -3,7 +3,7 @@ name = "{{cookiecutter.package_name}}"
 version = "0.0.0"
 description = "{{cookiecutter.description}}"
 authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
-license = "{{cookiecutter.license_name}}"
+license = "{{cookiecutter.license_spdx}}"
 readme = 'README.rst'
 repository = "{{cookiecutter.repository_http_url}}"
 

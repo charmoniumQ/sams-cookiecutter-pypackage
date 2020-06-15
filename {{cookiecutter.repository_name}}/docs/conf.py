@@ -33,7 +33,7 @@ release = getattr(package, "__version__", "0.0.0")
 extensions = [
     "autoapi.extension",
     # "sphinx.ext.autodoc",
-    "sphinx_autodoc_annotation",
+    # "sphinx_autodoc_annotation",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",

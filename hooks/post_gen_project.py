@@ -11,12 +11,13 @@ enable_resource_directory = str("{{cookiecutter.enable_resource_directory}}") ==
 enable_codecov = str("{{cookiecutter.enable_codecov}}") == "y"
 repository_user = "{{cookiecutter.repository_user}}"
 repository_name = "{{cookiecutter.repository_name}}"
-license_name = "{{cookiecutter.license_name}}"
+license_spdx = "{{cookiecutter.license_spdx}}"
 initial_commit = str("{{cookiecutter.initial_commit}}") == "y"
 repository_url = "{{cookiecutter.repository_url}}"
 enable_mypy = str("{{cookiecutter.enable_mypy}}") == "y"
 enable_pylint = str("{{cookiecutter.enable_pylint}}") == "y"
 enable_sphinx = str("{{cookiecutter.enable_sphinx}}") == "y"
+code_of_conduct = str("{{cookiecutter.code_of_conduct}}")
 
 
 def add_todo(text: str) -> None:
@@ -25,7 +26,7 @@ def add_todo(text: str) -> None:
 
 
 if not enable_cli:
-    os.remove(Path(".") / "{{cookiecutter.package_name}}" / "cli.py")
+    os.remove(Path(".") / "{{cookiecutter.package_name}}" / "_cli.py")
 
 
 if not enable_resource_directory:
@@ -57,17 +58,35 @@ if not enable_sphinx:
     os.remove("scripts/docs.sh")
 
 
-url = f"https://github.com/spdx/license-list-data/blob/master/text/{license_name.upper()}.txt"
+def download_url(url: str, dest: Path) -> None:
+    text = urllib.request.urlopen(url)
+    with dest.open("wb") as file_dest:
+        file_dest.write(text.read())
+
+
+license_url = f"https://github.com/spdx/license-list-data/blob/master/text/{license_spdx.upper()}.txt"
 try:
-    license_source = urllib.request.urlopen(url)
+    download_url(license_url, Path(".") / "LICENSE.txt")
 except urllib.error.HTTPError:
-    print(f"Unable to find license {license_name} in [SPDX repository][1].")
+    print(f"Unable to find license {license_spdx} in [SPDX repository][1].")
     print("[1]: https://github.com/spdx/license-list-data/blob/master/text")
-    add_todo("- [ ] Select a license.")
+    add_todo(f"- [ ] Download {license_spdx} license.")
 else:
-    with (Path(".") / "LICENSE.txt").open("wb") as license_dest:
-        license_dest.write(license_source.read())
     add_todo("- [ ] Fill copyright informaiton into license (if necessary).")
+
+
+code_of_conduct_url = {
+    "contributor-covenant": "https://www.contributor-covenant.org/version/2/0/code_of_conduct/code_of_conduct.md"
+}.get(code_of_conduct, code_of_conduct)
+
+if code_of_conduct_url.startswith("http"):
+    download_url(code_of_conduct_url, Path(".") / "CODE_OF_CONDUCT")
+    add_todo(
+        f"- [ ] Review CODE_OF_CONDUCT ({code_of_conduct}), especially enforcement."
+    )
+else:
+    if code_of_conduct.lower() != "none":
+        add_todo(f"- [ ] Add CODE_OF_CONDUCT ({code_of_conduct}).")
 
 
 if initial_commit:
@@ -83,7 +102,11 @@ if initial_commit:
             "git",
             "commit",
             "-m",
-            "Iniital commit (with [sams-cookiecutter-pypackage])\n\n[1]: https://github.com/charmoniumQ/sams-cookiecutter-pypackage\n",
+            """
+Iniital commit (with [sams-cookiecutter-pypackage])
+
+[1]: https://github.com/charmoniumQ/sams-cookiecutter-pypackage
+""".lstrip(),
         ],
         check=True,
         capture_output=True,

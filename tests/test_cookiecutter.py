@@ -59,12 +59,13 @@ context_spec: Mapping[str, List[str]] = {
     "repository_name": ["nameless"],
     "enable_cli": ["y", "n"],
     "enable_resource_directory": ["y", "n"],
-    "license_name": ["NCSA"],
+    "license_spdx": ["NCSA"],
     **{f"enable_{option}": ["y", "n"] for option in tools},
     "enable_sphinx": ["y", "n"],
     "enable_codecov": ["y", "n"],
     "enable_coverage": ["y", "n"],
     "initial_commit": ["y"],
+    "code_of_conduct": ["none", "contributor-covenant"],
 }
 
 
@@ -128,7 +129,7 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
     if context["enable_codecov"] == "y":
         assert "codecov" in read_file(proj_root / "TODO.md")
 
-    if context["license_name"].lower() == "ncsa":
+    if context["license_spdx"].lower() == "ncsa":
         assert "NCSA" in read_file(proj_root / "LICENSE.txt")
 
     if context["enable_sphinx"] == "y":
@@ -144,6 +145,13 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
 
     if context["initial_commit"] == "y":
         assert subprocess_run(["git", "status", "porcelain"])
+
+    if context["code_of_conduct"] == "contributor-covenant":
+        assert "Contributor Covenant Code of Conduct" in read_file(
+            proj_root / "CODE_OF_CONDUCT"
+        )
+    else:
+        assert not (proj_root / "CODE_OF_CONDUCT").exists()
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
