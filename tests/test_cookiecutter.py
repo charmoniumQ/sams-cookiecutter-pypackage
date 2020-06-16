@@ -66,6 +66,7 @@ context_spec: Mapping[str, List[str]] = {
     "enable_coverage": ["y", "n"],
     "initial_commit": ["y"],
     "code_of_conduct": ["none", "contributor-covenant"],
+    "enable_bump2version": ["y", "n"],
 }
 
 
@@ -155,6 +156,10 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         )
     else:
         assert not (proj_root / "CODE_OF_CONDUCT").exists()
+
+    if context["enable_bump2version"] == "y":
+        assert (proj_root / ".bumpversion.cfg")
+        subprocess_run(["poetry", "run", "bump2version", "patch"])
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:

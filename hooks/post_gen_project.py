@@ -1,3 +1,4 @@
+from typing import Union
 import os
 import shutil
 import subprocess
@@ -18,27 +19,28 @@ enable_mypy = str("{{cookiecutter.enable_mypy}}") == "y"
 enable_pylint = str("{{cookiecutter.enable_pylint}}") == "y"
 enable_sphinx = str("{{cookiecutter.enable_sphinx}}") == "y"
 code_of_conduct = str("{{cookiecutter.code_of_conduct}}")
+enable_bump2version = str("{{cookiecutter.enable_bump2version}}") == "y"
 
 
 def add_todo(text: str) -> None:
-    with (Path(".") / "TODO.md").open("a") as f:
+    with open("TODO.md", "a") as f:
         f.write(text + "\n")
 
 
 if not enable_cli:
-    os.remove(Path(".") / "{{cookiecutter.package_name}}/_cli.py")
+    os.remove("{{cookiecutter.package_name}}/_cli.py")
 
 
 if not enable_resource_directory:
-    shutil.rmtree(Path(".") / "res")
+    shutil.rmtree("res")
 
 
 if not enable_mypy:
-    os.remove(Path(".") / "mypy.ini")
+    os.remove("mypy.ini")
 
 
 if not enable_pylint:
-    os.remove(Path(".") / ".pylintrc")
+    os.remove(".pylintrc")
 
 
 if enable_codecov:
@@ -58,15 +60,19 @@ if not enable_sphinx:
     os.remove("scripts/docs.sh")
 
 
-def download_url(url: str, dest: Path) -> None:
+if not enable_bump2version:
+    os.remove(".bumpversion.cfg")
+
+
+def download_url(url: str, dest: Union[Path, str, bytes]) -> None:
     text = urllib.request.urlopen(url)
-    with dest.open("wb") as file_dest:
+    with open(dest, "wb") as file_dest:
         file_dest.write(text.read())
 
 
 license_url = f"https://github.com/spdx/license-list-data/blob/master/text/{license_spdx.upper()}.txt"
 try:
-    download_url(license_url, Path(".") / "LICENSE.txt")
+    download_url(license_url, "LICENSE.txt")
 except urllib.error.HTTPError:
     print(f"Unable to find license {license_spdx} in [SPDX repository][1].")
     print("[1]: https://github.com/spdx/license-list-data/blob/master/text")
@@ -80,7 +86,7 @@ code_of_conduct_url = {
 }.get(code_of_conduct, code_of_conduct)
 
 if code_of_conduct_url.startswith("http"):
-    download_url(code_of_conduct_url, Path(".") / "CODE_OF_CONDUCT")
+    download_url(code_of_conduct_url, "CODE_OF_CONDUCT")
     add_todo(
         f"- [ ] Review CODE_OF_CONDUCT ({code_of_conduct}), especially enforcement."
     )

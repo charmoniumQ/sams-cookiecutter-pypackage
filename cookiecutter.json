@@ -26,4 +26,5 @@
 	, "enable_coverage": "n"
 	, "enable_codecov": "y"
 	, "enable_sphinx": "y"
+	, "enable_bump2version": "y"
 }
