@@ -128,6 +128,9 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
             print(script_test.stdout.decode())
         assert tool_present == tool_enabled, (tool, tool_present, tool_enabled)
 
+    if context["enable_mypy"] == "y":
+        assert (test_proj / "stubs").exists()
+
     assert (context["enable_codecov"] == "y") == (
         "codecov" in read_file(test_proj / "scripts/test.sh")
     )

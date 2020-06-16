@@ -31,11 +31,13 @@ if not enable_cli:
     os.remove("{{cookiecutter.package_name}}/_cli.py")
 
 
-if not enable_resource_directory:
-    shutil.rmtree("res")
+if enable_resource_directory:
+    Path("res").mkdir()
 
 
-if not enable_mypy:
+if enable_mypy:
+    Path("stubs").mkdir()
+else:
     os.remove("mypy.ini")
 
 

@@ -1,21 +1,21 @@
-import sys
 import contextlib
+import sys
+from contextlib import contextmanager
 from types import TracebackType
 from typing import (
-    TypeVar,
+    IO,
+    Any,
+    Callable,
+    ContextManager,
+    Dict,
     Generic,
     Iterable,
-    IO,
-    Union,
-    ContextManager,
-    Optional,
-    Any,
-    Type,
     Iterator,
-    Dict,
-    Callable,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
 )
-from contextlib import contextmanager
 
 Value = TypeVar("Value")
 

@@ -20,8 +20,8 @@
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
 - [X] Fill first commit
 - [ ] Radon code metrics
-- [ ] Mypy Stubs (mypy_path and linting too)
+- [x] Mypy Stubs (mypy_path and linting too)
 - [ ] Wemake-Python-Styleguide
-- [ ] JSON options
+- [x] JSON options
 - [ ] Tox test env
 - [ ] direnv, .editorconfig

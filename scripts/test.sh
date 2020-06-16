@@ -3,7 +3,7 @@
 cd "$(dirname "${0}")/.."
 
 #package=
-src="./hooks ./scripts"
+src="./hooks ./scripts ./stubs"
 check=$([ "${1}" = "check" ] && echo "true" || echo "")
 verbose=${verbose:-}
 skip_lint=${skip_lint:-}

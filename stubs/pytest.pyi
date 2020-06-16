@@ -1,5 +1,3 @@
-from typing import ContextManager, Any, Optional, Type
+from typing import Any, ContextManager, Optional, Type
 
-
-def raises(exc: Optional[Type[Exception]] = None) -> ContextManager[Any]:
-    ...
+def raises(exc: Optional[Type[Exception]] = None) -> ContextManager[Any]: ...

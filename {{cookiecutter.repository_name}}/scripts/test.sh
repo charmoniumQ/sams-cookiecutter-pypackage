@@ -16,6 +16,18 @@ other_srcs="tests/ $(find scripts/ -name '*.py' -printf '%p ')"
 {%- if cookiecutter.enable_sphinx == "y" %}
 other_srcs="${other_srcs} docs/conf.py"
 {%- endif %}
+{%- if cookiecutter.enable_mypy == "y" %}
+other_srcs="${other_srcs} ./stubs"
+{%- endif %}
+
+function excluding() {
+	# Usage: excluding needle haystack...
+	for var in "$@"; do
+		if [ "${var}" != "${1}" ]; then
+			echo -e "$var "
+		fi
+	done
+}
 
 function now() {
 	python -c 'import datetime; print((datetime.datetime.now() - datetime.datetime(1970, 1, 1)).total_seconds())'
@@ -84,7 +96,7 @@ flag_check=$([ -n "${check}" ] && echo "--check")
 capture \
 	poetry run \
 		env PYTHONPATH="${package_loc}:${PYTHONPATH}" \
-			dmypy run -- ${flag_verbose} ${other_srcs} $(find "${package}" -name '*.py')
+			dmypy run -- ${flag_verbose} $(excluding "./stubs" ${other_srcs}) $(find "${package}" -name '*.py')
 {% endif %}
 
 {%- if cookiecutter.enable_pytest == "y" %}
@@ -97,7 +109,7 @@ capture \
 {%- if cookiecutter.enable_bandit == "y" %}
 capture \
 	poetry run \
-		env PYTHONPATH="${package_loc}:${PYTHONPATH}" \
+		env PYTHONPATH="${package_loc}:${PYTHONPATH}" MYPYPATH="./stubs:${MYPYPATH}" \
 			bandit --recursive ${flag_verbose_or_quiet} "${package}"
 # I only care about vulns in the exported package
 {% endif %}
