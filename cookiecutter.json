@@ -23,7 +23,7 @@
 	, "enable_bandit": "y"
 	, "enable_mypy": "y"
 	, "enable_pytest": "y"
-	, "enable_coverage": "y"
+	, "enable_coverage": "n"
 	, "enable_codecov": "y"
 	, "enable_sphinx": "y"
 }

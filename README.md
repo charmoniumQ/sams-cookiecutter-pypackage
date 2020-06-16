@@ -13,9 +13,9 @@
 - [X] Sphinx prose documentation
 - [x] Sphinx API documentation
 - [ ] Improve API docs (intersphinx, view code, types in description)
-- [ ] Doctests
+- [x] Doctests
 - [ ] Documentation deploy (hook)
-- [ ] Version management (bumpversion or punch?)
+- [ ] Version management (bumpversion)
 - [ ] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
 - [X] Fill first commit

@@ -9,6 +9,12 @@ def returns_four(x: Optional[int] = None) -> 'int':
 
     .. _`reStructuredText`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 
+    >>> import {{cookiecutter.package_name}}
+    >>> {{cookiecutter.package_name}}.returns_four()
+    4
+    >>> print("doctest is running")
+    doctest is running
+
     This is the last paragraph of the long description, after which a
     block describes the arguments and returned value in any format accepted by (`napoleon`_).
 

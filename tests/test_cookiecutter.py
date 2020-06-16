@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, Iterable, List, Mapping, TypeVar
+from typing import Any, Iterable, List, Mapping, TypeVar, Union
 
 import pytest
 from cookiecutter.exceptions import CookiecutterException
@@ -109,10 +109,10 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         assert tool_present == tool_enabled, (tool, tool_present, tool_enabled)
 
     assert (context["enable_codecov"] == "y") == (
-        "codecov" in read_file(proj_root / "scripts" / "test.sh")
+        "codecov" in read_file(proj_root / "scripts/test.sh")
     )
     assert (context["enable_coverage"] == "y") == (
-        "coverage" in read_file(proj_root / "scripts" / "test.sh")
+        "coverage" in read_file(proj_root / "scripts/test.sh")
     )
 
     if (
@@ -138,10 +138,13 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
             cwd=proj_root,
             env=dict(**os.environ, verbose="true"),
         )
-        assert (proj_root / "docs" / "_build" / "index.html").exists()
+        assert (proj_root / "docs/_build/index.html").exists()
+        assert "autoapi/nameless/_lib/index" in read_file(
+            proj_root / "docs/_doctest/output.txt"
+        )
     else:
         assert not (proj_root / "docs").exists()
-        assert not (proj_root / "scripts" / "docs.sh").exists()
+        assert not (proj_root / "scripts/docs.sh").exists()
 
     if context["initial_commit"] == "y":
         assert subprocess_run(["git", "status", "porcelain"])
@@ -178,7 +181,7 @@ def subprocess_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess
         raise err
 
 
-def read_file(file_name: Path) -> str:
+def read_file(file_name: Union[bytes, str, Path]) -> str:
     with open(file_name) as file_obj:
         return file_obj.read()
 

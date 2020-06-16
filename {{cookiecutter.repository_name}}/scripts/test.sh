@@ -91,7 +91,7 @@ capture \
 capture \
 	poetry run \
 		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${package}" --cov-report=term-missing {% endif %}
-# I only care about coverage in the exported package
+# I only care about --cov= in the exported package
 {% endif %}
 
 {%- if cookiecutter.enable_bandit == "y" %}

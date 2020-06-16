@@ -26,7 +26,7 @@ def add_todo(text: str) -> None:
 
 
 if not enable_cli:
-    os.remove(Path(".") / "{{cookiecutter.package_name}}" / "_cli.py")
+    os.remove(Path(".") / "{{cookiecutter.package_name}}/_cli.py")
 
 
 if not enable_resource_directory:
