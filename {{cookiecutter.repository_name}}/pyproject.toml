@@ -1,11 +1,14 @@
 [tool.poetry]
-name = "{{cookiecutter.package_name}}"
+name = "{{cookiecutter.pypi_name}}"
 version = "0.0.0"
 description = "{{cookiecutter.description}}"
 authors = ["{{cookiecutter.author_name}} <{{cookiecutter.author_email}}>"]
 license = "{{cookiecutter.license_spdx}}"
 readme = 'README.rst'
 repository = "{{cookiecutter.repository_http_url}}"
+packages = [
+    { include = "{{cookiecutter.package_name}}" },
+]
 
 {%- if cookiecutter.enable_resource_directory == "y" %}
 include = ["res/"]

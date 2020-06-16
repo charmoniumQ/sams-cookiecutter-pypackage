@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any, Iterable, List, Mapping, TypeVar, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, TypeVar, Union
 
 import pytest
 from cookiecutter.exceptions import CookiecutterException
@@ -67,35 +67,54 @@ context_spec: Mapping[str, List[str]] = {
     "initial_commit": ["y"],
     "code_of_conduct": ["none", "contributor-covenant"],
     "enable_bump2version": ["y", "n"],
+    "pypi_package": ["y", "n"],
 }
 
 
 def verify(out_dir: Path, context: Mapping[str, str]) -> None:
-    proj_root = out_dir / context["repository_name"]
+    test_proj = out_dir / context["repository_name"]
 
-    subprocess_run(
-        ["poetry", "check"], cwd=proj_root,
-    )
+    def subprocess_run(
+        cmd: List[str], env: Optional[Dict[str, str]] = None, **kwargs: Any
+    ) -> subprocess.CompletedProcess[bytes]:
+        if not env:
+            env = {}
+        try:
+            return subprocess.run(
+                cmd,
+                check=True,
+                capture_output=True,
+                cwd=test_proj,
+                env={**os.environ, **env},
+                **kwargs,
+            )
+        except subprocess.CalledProcessError as err:
+            hbar = "-" * 40
+            print(f"{hbar} stdout {hbar}")
+            sys.stdout.buffer.write(err.stdout)
+            print(f"{hbar}--------{hbar}")
+            print(f"{hbar} stderr {hbar}")
+            sys.stdout.buffer.write(err.stderr)
+            print(f"{hbar}--------{hbar}")
+            raise err
 
-    subprocess_run(
-        ["poetry", "install"], cwd=proj_root,
-    )
+    subprocess_run(["poetry", "check"])
+
+    subprocess_run(["poetry", "install"])
 
     if context["enable_cli"] == "y":
-        subprocess_run(
-            ["poetry", "run", context["package_name"]], cwd=proj_root,
-        )
+        subprocess_run(["poetry", "run", context["package_name"]])
     else:
-        assert not (proj_root / context["package_name"] / "cli.py").exists()
+        assert not (test_proj / context["package_name"] / "cli.py").exists()
 
     if context["enable_resource_directory"] == "y":
         # TODO: assert resource dir exists in install
         pass
     else:
-        assert not (proj_root / "res").exists()
+        assert not (test_proj / "res").exists()
 
     script_test = subprocess_run(
-        ["./scripts/test.sh"], cwd=proj_root, env=dict(**os.environ, verbose="true"),
+        ["./scripts/test.sh"], env=dict(**os.environ, verbose="true"),
     )
 
     for tool in tools:
@@ -110,10 +129,10 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         assert tool_present == tool_enabled, (tool, tool_present, tool_enabled)
 
     assert (context["enable_codecov"] == "y") == (
-        "codecov" in read_file(proj_root / "scripts/test.sh")
+        "codecov" in read_file(test_proj / "scripts/test.sh")
     )
     assert (context["enable_coverage"] == "y") == (
-        "coverage" in read_file(proj_root / "scripts/test.sh")
+        "coverage" in read_file(test_proj / "scripts/test.sh")
     )
 
     if (
@@ -122,44 +141,56 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         assert "--cov" in script_test.stdout.decode()
 
     if context["enable_pylint"] == "n":
-        assert not (proj_root / ".pylintrc").exists()
+        assert not (test_proj / ".pylintrc").exists()
 
     if context["enable_mypy"] == "n":
-        assert not (proj_root / "mypy.ini").exists()
+        assert not (test_proj / "mypy.ini").exists()
 
     if context["enable_codecov"] == "y":
-        assert "codecov" in read_file(proj_root / "TODO.md")
+        assert "codecov" in read_file(test_proj / "TODO.md")
 
     if context["license_spdx"].lower() == "ncsa":
-        assert "NCSA" in read_file(proj_root / "LICENSE.txt")
+        assert "NCSA" in read_file(test_proj / "LICENSE.txt")
 
     if context["enable_sphinx"] == "y":
-        script_test = subprocess_run(
-            ["./scripts/docs.sh"],
-            cwd=proj_root,
-            env=dict(**os.environ, verbose="true"),
-        )
-        assert (proj_root / "docs/_build/index.html").exists()
+        script_test = subprocess_run(["./scripts/docs.sh"], env=dict(verbose="true"),)
+        assert (test_proj / "docs/_build/index.html").exists()
         assert "autoapi/nameless/_lib/index" in read_file(
-            proj_root / "docs/_doctest/output.txt"
+            test_proj / "docs/_doctest/output.txt"
         )
     else:
-        assert not (proj_root / "docs").exists()
-        assert not (proj_root / "scripts/docs.sh").exists()
+        assert not (test_proj / "docs").exists()
+        assert not (test_proj / "scripts/docs.sh").exists()
 
     if context["initial_commit"] == "y":
         assert subprocess_run(["git", "status", "porcelain"])
 
     if context["code_of_conduct"] == "contributor-covenant":
         assert "Contributor Covenant Code of Conduct" in read_file(
-            proj_root / "CODE_OF_CONDUCT"
+            test_proj / "CODE_OF_CONDUCT"
         )
     else:
-        assert not (proj_root / "CODE_OF_CONDUCT").exists()
+        assert not (test_proj / "CODE_OF_CONDUCT").exists()
 
-    if context["enable_bump2version"] == "y":
-        assert (proj_root / ".bumpversion.cfg")
-        subprocess_run(["poetry", "run", "bump2version", "patch"])
+    script_test = subprocess_run(
+        ["./scripts/publish.sh", "patch"],
+        env=dict(skip_test="true", skip_docs="true", dry_run="true"),
+    )
+
+    assert (context["pypi_package"] == "y") == (
+        "poetry publish" in read_file(test_proj / "scripts/publish.sh")
+    )
+    assert "./scripts/test.sh" in read_file(test_proj / "scripts/publish.sh")
+    assert (context["enable_sphinx"] == "y") == (
+        "./scripts/docs.sh" in read_file(test_proj / "scripts/publish.sh")
+    )
+    assert (context["enable_bump2version"] == "y") == (
+        "bump2version" in read_file(test_proj / "scripts/publish.sh")
+    )
+
+    assert (context["enable_bump2version"] == "y") == (
+        test_proj / ".bumpversion.cfg"
+    ).exists()
 
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
@@ -170,20 +201,6 @@ def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
     some_options = [options[0], options[-1], *random.sample(options, 2)]
     for values_choice in some_options:
         yield dict(zip(spec.keys(), values_choice))
-
-
-def subprocess_run(cmd: List[str], **kwargs: Any) -> subprocess.CompletedProcess[bytes]:
-    try:
-        return subprocess.run(cmd, check=True, capture_output=True, **kwargs)
-    except subprocess.CalledProcessError as err:
-        hbar = "-" * 40
-        print(f"{hbar} stdout {hbar}")
-        sys.stdout.buffer.write(err.stdout)
-        print(f"{hbar}--------{hbar}")
-        print(f"{hbar} stderr {hbar}")
-        sys.stdout.buffer.write(err.stderr)
-        print(f"{hbar}--------{hbar}")
-        raise err
 
 
 def read_file(file_name: Union[bytes, str, Path]) -> str:

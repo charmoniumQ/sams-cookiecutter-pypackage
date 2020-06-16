@@ -1,10 +1,10 @@
-from typing import Union
 import os
 import shutil
 import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
+from typing import Union
 
 # str() helps mypy not be smart about comparing literals
 enable_cli = str("{{cookiecutter.enable_cli}}") == "y"

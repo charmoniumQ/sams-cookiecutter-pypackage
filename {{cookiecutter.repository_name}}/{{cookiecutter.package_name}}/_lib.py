@@ -1,7 +1,7 @@
 from typing import Optional
 
 
-def returns_four(x: Optional[int] = None) -> 'int':
+def returns_four(x: Optional[int] = None) -> int:
     """Short description (should be an capitalized and punctuated imperative-verb-phrase or noun-phrase).
 
     This is the first paragraph in the long description. All sections

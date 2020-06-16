@@ -15,11 +15,13 @@
 - [ ] Improve API docs (intersphinx, view code, types in description)
 - [x] Doctests
 - [ ] Documentation deploy (hook)
-- [ ] Version management (bumpversion)
-- [ ] PyPI deployment
+- [x] Version management (bumpversion)
+- [x] PyPI deployment
 - [ ] Badges (tests passing, coverage, downloads, license, python versions, python implementation, published version) https://pypi.org/project/inquirer/
 - [X] Fill first commit
 - [ ] Radon code metrics
 - [ ] Mypy Stubs (mypy_path and linting too)
 - [ ] Wemake-Python-Styleguide
 - [ ] JSON options
+- [ ] Tox test env
+- [ ] direnv, .editorconfig

@@ -12,7 +12,7 @@ codecov=${codecov:-}
 
 package={{cookiecutter.package_name}}
 package_loc=$(dirname "${PWD}/${package}")
-other_srcs="tests/"
+other_srcs="tests/ $(find scripts/ -name '*.py' -printf '%p ')"
 {%- if cookiecutter.enable_sphinx == "y" %}
 other_srcs="${other_srcs} docs/conf.py"
 {%- endif %}
@@ -90,7 +90,7 @@ capture \
 {%- if cookiecutter.enable_pytest == "y" %}
 capture \
 	poetry run \
-		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${package}" --cov-report=term-missing {% endif %}
+		pytest --quiet --exitfirst {% if cookiecutter.enable_coverage == "y" or cookiecutter.enable_codecov %} --cov="${package}" --cov-report=term-missing {% endif %} tests
 # I only care about --cov= in the exported package
 {% endif %}
 

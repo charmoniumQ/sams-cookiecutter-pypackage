@@ -1,6 +1,6 @@
-{% for _ in cookiecutter.repository_name %}={% endfor %}
-{{cookiecutter.repository_name}}
-{% for _ in cookiecutter.repository_name %}={% endfor %}
+{% for _ in cookiecutter.pypi_name %}={% endfor %}
+{{cookiecutter.pypi_name}}
+{% for _ in cookiecutter.pypi_name %}={% endfor %}
 
 {{cookiecutter.description}}
 

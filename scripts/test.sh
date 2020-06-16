@@ -3,7 +3,7 @@
 cd "$(dirname "${0}")/.."
 
 #package=
-src="./hooks"
+src="./hooks ./scripts"
 check=$([ "${1}" = "check" ] && echo "true" || echo "")
 verbose=${verbose:-}
 skip_lint=${skip_lint:-}
@@ -39,17 +39,17 @@ function capture() {
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") "${src}" tests
+			autoflake --recursive $([ -n "${check}" ] && echo "--check" || echo "--in-place") ${src} tests
 
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			isort --recursive $([ -n "${check}" ] && echo "--check-only") "${src}" tests
+			isort --recursive $([ -n "${check}" ] && echo "--check-only") ${src} tests
 
 [[ -n "${skip_lint}" ]] || \
 	capture \
 		poetry run \
-			black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") "${src}" tests
+			black --quiet --target-version py38 $([ -n "${check}" ] && echo "--check") ${src} tests
 
 [[ -n "${skip_lint}" ]] || \
 	capture \
@@ -58,8 +58,8 @@ function capture() {
 
 capture \
 	poetry run \
-		env PYTHONPATH="$(dirname "${src}"):${PYTHONPATH}" MYPYPATH="./stubs:${MYPYPATH}" \
-			dmypy run -- "${src}" tests
+		env PYTHONPATH=".:${PYTHONPATH}" MYPYPATH="./stubs:${MYPYPATH}" \
+			dmypy run -- ${src} tests
 
 capture \
 	poetry run \

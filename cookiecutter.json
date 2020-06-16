@@ -1,11 +1,12 @@
 {
-    "package_name": "nameless"
-    , "description": "Foo's the bar"
-    , "author_name": "Samuel Grayson"
+	"package_name": "ch_nameless"
+	, "pypi_name": "{{cookiecutter.package_name | lower | replace('_', '-')}}"
+	, "description": "Foo's the bar"
+	, "author_name": "Samuel Grayson"
 	, "author_email": "sam+dev@samgrayson.me"
 	, "license_spdx": "NCSA"
 	, "initial_commit": "y"
-    , "repository_name": "{{ cookiecutter.package_name | lower | replace(' ', '-') }}"
+	, "repository_name": "{{cookiecutter.pypi_name}}"
 	, "repository_user": "charmoniumQ"
 	, "repository_host": "github.com"
 	, "repository_http_url": "https://{{cookiecutter.repository_host}}/{{cookiecutter.repository_user}}/{{cookiecutter.repository_name}}.git"
@@ -27,4 +28,5 @@
 	, "enable_codecov": "y"
 	, "enable_sphinx": "y"
 	, "enable_bump2version": "y"
+	, "pypi_package": "y"
 }

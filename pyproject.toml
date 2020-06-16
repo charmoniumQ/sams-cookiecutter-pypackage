@@ -3,7 +3,7 @@ name = "sams_cookiecutter_package"
 version = "0.0.0"
 description = "Cookie cutter for setting up python packages"
 authors = ["Samuel Grayson <sam+dev@samgrayson.me>"]
-license = "MPL"
+license = "MPL-2.0"
 readme = 'README.rst'
 repository = "https://github.com/charmoniumQ/sams-cookiecutter-package"
 

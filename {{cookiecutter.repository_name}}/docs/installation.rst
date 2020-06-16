@@ -8,11 +8,11 @@ Installation
 Stable release
 --------------
 
-To install {{cookiecutter.repository_name}}, run this command in your terminal:
+To install {{cookiecutter.pypi_name}}, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install {{cookiecutter.repository_name}}
+    $ pip install {{cookiecutter.pypi_name}}
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -24,7 +24,7 @@ you through the process.
 Dev build
 ---------
 
-The sources for {{cookiecutter.repository_name}} can be downloaded from the `Github repo`_.
+The sources for {{cookiecutter.pypi_name}} can be downloaded from the `Github repo`_.
 
 These sources can be installed with `Poetry`_
 
