@@ -15,6 +15,7 @@
   "python_version": "{cookiecutter.python_version}",
   "code of conduct should be a \"none\", \"contributor-covenant\", or a URL": "{cookiecutter.code of conduct should be a \"none\", \"contributor-covenant\", or a URL}",
   "code_of_conduct": "{cookiecutter.code_of_conduct}",
+  "pypi_package": "{cookiecutter.pypi_package}",
   "enable_cli": "{cookiecutter.enable_cli}",
   "enable_resource_directory": "{cookiecutter.enable_resource_directory}",
   "enable_autoflake": "{cookiecutter.enable_autoflake}",
@@ -28,5 +29,5 @@
   "enable_codecov": "{cookiecutter.enable_codecov}",
   "enable_sphinx": "{cookiecutter.enable_sphinx}",
   "enable_bump2version": "{cookiecutter.enable_bump2version}",
-  "pypi_package": "{cookiecutter.pypi_package}"
+  "enable_tox": "{cookiecutter.enable_tox}"
 }

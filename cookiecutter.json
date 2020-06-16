@@ -22,7 +22,7 @@
 	, "enable_isort": "y"
 	, "enable_black": "y"
 	, "enable_pylint": "y"
-	, "enable_bandit": "y"
+	, "enable_bandit": "n"
 	, "enable_mypy": "y"
 	, "enable_pytest": "y"
 	, "enable_coverage": "n"

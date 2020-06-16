@@ -61,6 +61,8 @@ capture \
 		env PYTHONPATH=".:${PYTHONPATH}" MYPYPATH="./stubs:${MYPYPATH}" \
 			dmypy run -- ${src} tests
 
+./scripts/gen.py
+
 capture \
 	poetry run \
 		pytest -vvv --quiet --exitfirst tests
