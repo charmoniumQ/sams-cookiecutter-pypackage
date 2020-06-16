@@ -196,6 +196,8 @@ def verify(out_dir: Path, context: Mapping[str, str]) -> None:
         test_proj / ".bumpversion.cfg"
     ).exists()
 
+    subprocess_run(["tox", "-p"])
+
 
 def expand(spec: Mapping[T, Iterable[V]]) -> Iterable[Mapping[T, V]]:
     options = list(itertools.product(*spec.values()))

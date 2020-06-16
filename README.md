@@ -13,7 +13,7 @@ python_version [^3.8]:
 enable_cli [y]:
 enable_resource_directory [y]:
 ...
-$ cd package
+$ cd foo-package
 $ cat TODO.md
 ```
 
