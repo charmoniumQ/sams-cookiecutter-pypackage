@@ -68,6 +68,7 @@ context_spec: Mapping[str, List[str]] = {
     "code_of_conduct": ["none", "contributor-covenant"],
     "enable_bump2version": ["y", "n"],
     "pypi_package": ["y", "n"],
+    "enable_tox": ["y", "n"],
 }
 
 

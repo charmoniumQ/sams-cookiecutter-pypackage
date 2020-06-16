@@ -15,6 +15,7 @@
 	, "python_version": "^3.8"
 	, "code of conduct should be a \"none\", \"contributor-covenant\", or a URL": "(press enter)"
 	, "code_of_conduct": "contributor-covenant"
+	, "pypi_package": "y"
 	, "enable_cli": "y"
 	, "enable_resource_directory": "y"
 	, "enable_autoflake": "y"
@@ -28,5 +29,5 @@
 	, "enable_codecov": "y"
 	, "enable_sphinx": "y"
 	, "enable_bump2version": "y"
-	, "pypi_package": "y"
+	, "enable_tox": "y"
 }
