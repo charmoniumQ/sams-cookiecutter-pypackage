@@ -39,10 +39,6 @@ $ cat TODO.md
 
 - Fast dev/test cycle:
 
-  - **Clean tool integration script (`./scripts/test.sh`):** Developers just have remember one
-    command for their dev-test-cycle which runs auto-formatting, linting, static analysis, and
-    unittests. This can be extended with named option variables, such as
-	`skip_lint=t verbose=t ./scripts/test.sh`.
 
   - **Formatting ([autoflake], [isort], [black]):** Linting is a good first step, but autoformatting is
     the logical completion. You rarely have to manually enforce code style with these tools.
@@ -108,6 +104,16 @@ $ cat TODO.md
 
   - **Resource directory (`res/`):** This directory and its contents will be present in all package
     installations. Non-python configurations or data could go here.
+
+- TODO:
+
+  - **Namespace packages**
+
+  - **Deduplicate linting**
+
+  - **Make black compatible with autoflake**
+
+  - **Make tests part of package** This way, `mypy -p ${package}` works.
 
 [Pipenv]: https://pipenv.pypa.io/en/latest/
 [Poetry]: https://python-poetry.org/

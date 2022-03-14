@@ -1,0 +1,21 @@
+{
+  "cookiecutter": {
+    "repo_name": "{{cookiecutter.repo_name}}",
+    "package_name": "{{cookiecutter.package_name}}",
+    "description": "{{cookiecutter.description}}",
+    "author_name": "{{cookiecutter.author_name}}",
+    "author_email": "{{cookiecutter.author_email}}",
+    "license": "{{cookiecutter.license}}",
+    "__year": "{{cookiecutter.__year}}",
+    "repo_user": "{{cookiecutter.repo_user}}",
+    "repo_url": "{{cookiecutter.repo_url}}",
+    "version": "{{cookiecutter.version}}",
+    "keywords": "{{cookiecutter.keywords}}",
+    "trove_intended_audience": "{{cookiecutter.trove_intended_audience}}",
+    "trove_license": "{{cookiecutter.trove_license}}",
+    "trove_topics": "{{cookiecutter.trove_topics}}",
+    "trove_classifiers": "{{cookiecutter.trove_classifiers}}",
+    "nix_dependencies": "{{cookiecutter.nix_dependencies}}"
+  },
+  "comment": "This repository was created from a template in <https://github.com/charmoniumQ/sams-cookiecutter-pypackage.git> with these options. Use `cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --overwrite-if-exists --reply --replay-file cookiecutter_replay.json` to regenerate."
+}
