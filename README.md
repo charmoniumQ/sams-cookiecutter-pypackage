@@ -21,7 +21,8 @@ description: foo the bar with a baz
 
 $ cd foo_package
 
-# There are three ways to enter the development environment. See `CONTRIBUTING.md` in the generated repo.
+# There are mulitple ways to enter the development environment.
+# See `CONTRIBUTING.md` in the generated repo.
 # I recommend using direnv.
 $ direnv allow
 # Now you are in the development environment.
@@ -106,24 +107,23 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
   your code as a package, because this gives you a single namespace to put your modules, most
   dependency tools operate at the package-level, and `pyproject.toml` operates at a package-level.
 
-- `README.rst` with cool-looking automatically updating status buttons. The ReStructured Text is a
-  bit less pleasant than Markdown, but Markdown is still a second-class citizen on PyPI, whereas
-  both can render ReStructuredText just fine. `rstcheck` should help the syntax issues.
+- `README.rst` with cool-looking automatic status buttons. The ReStructured Text is a bit less
+  pleasant than Markdown, but Markdown is still a second-class citizen on PyPI, whereas both can
+  render ReStructuredText just fine. `rstcheck` should help the syntax issues.
 
 - `pyproject.toml` introduced in [PEP 518] is the replacement for `setup.py` and `setup.cfg`. It is
   a unified space for storing the configuration of arbitrary tools.
 
-- (Optional) [Poetry] for dependency management: Poetry is a tool for managing
-  the lifecycle of Python packages. It replaces the verbose `setup.py` and `setup.cfg`. Should you
-  want to publish your package, Poetry makes that easy, unlike [Pipenv].
+- (Optional) [Poetry] for dependency management: Poetry is a tool for managing the lifecycle of
+  Python packages. It replaces the verbose `setup.py` and `setup.cfg`. Should you want to publish
+  your package, Poetry makes that easy, unlike [Pipenv].
 
 - (Optional) [Nix] for package management: If you need system-level dependencies (e.g. C libraries,
   Python versions), Nix can install these for you. If you already have a system that works, you can
   safely ignore `flake.nix`.
 
-- [Contributor Covenant] as the Code of Conduct. If you are
-  philosophically opposed to codes of conduct, just remove it in the
-  generated repo.
+- [Contributor Covenant] as the Code of Conduct. If you are philosophically opposed to codes of
+  conduct, just remove it in the generated repo.
 
 # Documentation
 
@@ -137,13 +137,13 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 - `use_poetry`: Whether to use poetry for dependency management.
 - `pypi_package`: Whether to set up publishing on [PyPI] (doesn't publish anything until you run
   `./script.py publish`). This requires use of poetry.
-- `keywords`: Relevant keywords for [PyPI].
-- `trove_license`: If creating a package, copy a `License ::` identifier from [PyPI classifiers].
-- `trove_intended_audience`: If creating a package, copy **one or more** comma-separated `Intended
+- `keywords`: If publishing to PyPI, put relevant keywords to make your package discoverable.
+- `trove_license`: If publishing to PyPI, copy a `License ::` identifier from [PyPI classifiers].
+- `trove_intended_audience`: If publishing to PyPI, copy **one or more** comma-separated `Intended
   Audience ::` identifiers from [PyPI classifiers].
-- `trove_topics`: If creating a package, copy **one or more** comma-separated `Topic ::`
+- `trove_topics`: If publishing to PyPI, copy **one or more** comma-separated `Topic ::`
   identifiers from [PyPI classifiers].
-- `trove_other_classifiers`: If creating a package, copy **zero or more** comma-separated identifiers
+- `trove_other_classifiers`: If publishing to PyPI, copy **zero or more** comma-separated identifiers
   from [PyPI classifiers].
 
 # TODO
