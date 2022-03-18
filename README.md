@@ -1,8 +1,10 @@
-# What is this?
+# Sam's Cookiecutter repo for Python packages
 
-This is a [cookiecutter] for creating Python packages.
+This is a [cookiecutter] for creating Python packages. See
+[charmonium.cache] for an exmaple of a project generated with this
+cookiecutter.
 
-Usage:
+## Usage
 
 ```shell
 $ pip install --user git+https://github.com/cookiecutter/cookiecutter
@@ -11,28 +13,50 @@ $ pip install --user git+https://github.com/cookiecutter/cookiecutter
 # So instead, install from github.
 
 $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage
+# Fill these prompts
 repo_name: foo-package
 package_name: foo_package
-description: foos the bar
-# Fill these prompts
+description: foo the bar with a baz
 ...
 
 $ cd foo_package
-# Start hacking!
+
+# There are three ways to enter the development environment. See `CONTRIBUTING.md` in the generated repo.
+# I recommend using direnv.
+$ direnv allow
+# Now you are in the development environment.
+
+# Hackity hack hack.
+
+$ ./script.py fmt
+# Autoformats code
+
+$ ./script.py test
+# Tests code
+
+$ git push
+# (Assuming git was setup)
+# Runs CI tests in Github.
+
+$ ./script.py publish minor
+# Bumps minor version
+# Publishes package to PyPI
+# Publishes documentation to Github pages
 
 # If you change your mind on these options, or if I update the cookiecutter, you can regenerate your project like so:
+$ $EDITOR cookiecutter_replay.json
+# Revise selections
 
-$ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --overwrite-if-exists --reply --replay-file cookiecutter_replay.json
+$ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
+    --output-dir . \
+    --overwrite-if-exists \
+    --replay \
+    --replay-file cookiecutter_replay.json
+
 # Then go through the differences with `git add -p` or a Git GUI tool.
 ```
 
 ## Features
-
-- [Poetry] for dependency management: Even if you don't intend to publish a package, you should
-  probably think of your code as a package, because this gives you a single namespace to put
-  everything and most dependency tools operate at the package-level. Poetry is a tool for managing
-  the lifecycle of Python packages. It replaces the verbose `setup.py` and `setup.cfg`. Should you
-  want to publish your package, Poetry makes that easy, unlike [Pipenv].
 
 - `./script.py`: This script has run commands for all of the tools you should need. Putting these
   all into a script gives three advantages:
@@ -40,7 +64,7 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --o
   - It lets some of the configuration be dynamic rather than repeated. This reduces repetition. For
     example, `pytest-cov` needs to know what to measure coverage against. The script finds the
     current package and uses that.
-  - It can run multiple devtools in parallel. For example, `./script.py test` runs all relevant tests in parallel.
+  - It can run multiple devtools in parallel that would be tedious to type out. For example, `./script.py test` runs all six tools in parallel.
 
 - `./script.py fmt`: Fix your code in place
    - [autoimport] guesses and inserts the import statement if you forget to write it.
@@ -66,31 +90,34 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --o
   - [rstcheck] checks your `README.rst`.
   - [twine] checks the resulting package.
 
-- `./script.py publish`: Publishes the code to PyPI.
-  - [bump2version] bumps the version, writes a git tag, and pushes it to github.
+- `./script.py publish`: Publishes the code to PyPI and documentation to Github pages.
+  - [bump2version] bumps the version, writes a git tag, and pushes it to Github (if everything
+    succeeded).
   - [poetry] does the actual build and publish. Set `TWINE_USERNAME` and `TWINE_PASSWORD` to
     automate entering credentials.
 
-- `./script.py docs`: (under development)
-  - [proselint] checks grammar and spelling.
-  - ??? generates API docs. I am unhappy with sphinx and looking for replacements.
-  - Pushes documentation to Github pages branch.
+- `./script.py docs`: Check and render documentation.
+  - [proselint] checks grammar and spelling in ReStructured Text files.
+  - TODO: generate API docs. I am unhappy with sphinx and looking for replacements.
 
 - Github workflow automation: Creates a basic automation workflow that runs `./script.py all-tests`.
 
+- A note on packages: Even if you don't intend to publish a package, you should probably think of
+  your code as a package, because this gives you a single namespace to put everything and most
+  dependency tools operate at the package-level.
+
 - `pyproject.toml` introduced in [PEP 518] is the replacement for `setup.py` and `setup.cfg`. It is
   a unified space for storing the configuration of arbitrary tools.
+
+- (Optional) [Poetry] for dependency management: Poetry is a tool for managing
+  the lifecycle of Python packages. It replaces the verbose `setup.py` and `setup.cfg`. Should you
+  want to publish your package, Poetry makes that easy, unlike [Pipenv].
 
 - (Optional) [Nix] for package management: If you need system-level dependencies (e.g. C libraries,
   Python versions), Nix can install these for you. If you already have a system that works, you can
   safely ignore `flake.nix`.
 
 - [Contributor Covenant] as the Code of Conduct.
-
-# TODO
-
-- Handle namespace packages better
-- Generate API documentation and push to Github pages.
 
 # Documentation
 
@@ -113,6 +140,11 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --o
 - `trove_other_classifiers`: If creating a package, copy **zero or more** comma-separated identifiers
   from [PyPI classifiers].
 
+# TODO
+
+- Handle namespace packages better
+- Generate API documentation and push to Github pages.
+
 [Pipenv]: https://pipenv.pypa.io/en/latest/
 [Poetry]: https://python-poetry.org/
 [Contributor Covenant]:  https://www.contributor-covenant.org/
@@ -133,3 +165,4 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --o
 [PyPI classifiers]: https://pypi.org/classifiers/
 [Nix]: https://nixos.org/
 [SPDX license identifier]: https://spdx.org/licenses/
+[charmonium.cache]: https://github.com/charmoniumQ/charmonium.cache/
