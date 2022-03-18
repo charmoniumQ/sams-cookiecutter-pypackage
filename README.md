@@ -5,142 +5,131 @@ This is a [cookiecutter] for creating Python packages.
 Usage:
 
 ```shell
+$ pip install --user git+https://github.com/cookiecutter/cookiecutter
+# v2.0 of cookiecutter is not on PyPI yet!!
+# See https://github.com/cookiecutter/cookiecutter/issues/1636
+# So instead, install from github.
+
 $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage
-package_name: foo-package
-author_name: Samuel Grayson
-license_spdx [NCSA]: (enter for default)
-python_version [^3.8]:
-enable_cli [y]:
-enable_resource_directory [y]:
+repo_name: foo-package
+package_name: foo_package
+description: foos the bar
+# Fill these prompts
 ...
-$ cd foo-package
-$ cat TODO.md
+
+$ cd foo_package
+# Start hacking!
+
+# If you change your mind on these options, or if I update the cookiecutter, you can regenerate your project like so:
+
+$ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --overwrite-if-exists --reply --replay-file cookiecutter_replay.json
+# Then go through the differences with `git add -p` or a Git GUI tool.
 ```
 
 ## Features
 
-- Dependency management ([Poetry]):
+- [Poetry] for dependency management: Even if you don't intend to publish a package, you should
+  probably think of your code as a package, because this gives you a single namespace to put
+  everything and most dependency tools operate at the package-level. Poetry is a tool for managing
+  the lifecycle of Python packages. It replaces the verbose `setup.py` and `setup.cfg`. Should you
+  want to publish your package, Poetry makes that easy, unlike [Pipenv].
 
-  - **Why [Poetry]:** Raw setup.py is unideal, so is requirements.txt. The jury is still out on [Pipenv]
-    vs. [Poetry]. I decided to just pick one and see how it would work. Pipenv still requires one to
-    write a `setup.py`, so I picked Poetry. Poetry automates the process of deploying as well.
+- `./script.py`: This script has run commands for all of the tools you should need. Putting these
+  all into a script gives three advantages:
+  - It makes it easier to standardize the which tools are invoked and how they are invoked between developers and CI.
+  - It lets some of the configuration be dynamic rather than repeated. This reduces repetition. For
+    example, `pytest-cov` needs to know what to measure coverage against. The script finds the
+    current package and uses that.
+  - It can run multiple devtools in parallel. For example, `./script.py test` runs all relevant tests in parallel.
 
-- Everything beyond this point is strictly optional.
+- `./script.py fmt`: Fix your code in place
+   - [autoimport] guesses and inserts the import statement if you forget to write it.
+   - [isort] your imports, so you don't have to.
+   - [Black] "aims to enforce one style and one style only, with some room for pragmatism." If you
+     don't like how this formats a single line, you can ignore just that section with `# fmt:
+     off`/`# fmt: on`.
 
-- Repository metadata:
+- `./script.py test`: Runs tests on your code.
+  - [pylint] is the most thorough and it warns for semantic errors. If some particular warning is
+    bothering you, you can ignore it in the `pylintrc`. Pylint gives you a report to see if your
+    code has worsened.
+  - [mypy] type-checks Python code with type annotations. By default, strict mode is enabled, but
+    this can be relaxed in `pyproject.toml`
+  - [pytest] runs tests in parallel with debug information. This cookiecutter includes a template
+    for writing your own tests.
+  - [coverage] to evaluate code coverage.
+  - [radon] tells you which modules and functions are most complex. This helps you know what to
+    simplify.
 
-  - **README template:** (badges not implemented yet [example badges])
+- `./script.py all-tests`: Runs extra tests on your code in every environment.
+  - [tox] runs tests in multiple Python environments, so you can test compatibility.
+  - [rstcheck] checks your `README.rst`.
+  - [twine] checks the resulting package.
 
-  - **Code of Conduct:** Exact source is specifiable, but [Contributor Covenant] by default; can also be
-    skipped.
+- `./script.py publish`: Publishes the code to PyPI.
+  - [bump2version] bumps the version, writes a git tag, and pushes it to github.
+  - [poetry] does the actual build and publish. Set `TWINE_USERNAME` and `TWINE_PASSWORD` to
+    automate entering credentials.
 
-  - **License:** Downloads license according to the SPDX identifier (also puts this in the SPDX
-    identifier in machine-discoverable places).
+- `./script.py docs`: (under development)
+  - [proselint] checks grammar and spelling.
+  - ??? generates API docs. I am unhappy with sphinx and looking for replacements.
+  - Pushes documentation to Github pages branch.
 
-- Fast dev/test cycle:
+- Github workflow automation: Creates a basic automation workflow that runs `./script.py all-tests`.
 
+- `pyproject.toml` introduced in [PEP 518] is the replacement for `setup.py` and `setup.cfg`. It is
+  a unified space for storing the configuration of arbitrary tools.
 
-  - **Formatting ([autoflake], [isort], [black]):** Linting is a good first step, but autoformatting is
-    the logical completion. You rarely have to manually enforce code style with these tools.
+- (Optional) [Nix] for package management: If you need system-level dependencies (e.g. C libraries,
+  Python versions), Nix can install these for you. If you already have a system that works, you can
+  safely ignore `flake.nix`.
 
-  - **Linting ([pylint]):** Linting can go far beyond capturing formatting/style problems. Pylint is
-    regarded as the pickiest linter. Pylint also warns of semantic errors often much faster than the
-    unittests would have. Pylint has a reputation for being the 'pickiest' linter, so usually big
-    projects use [flake8] instead. However, If you are starting a project from scratch, it is easier
-    to keep good coding standards from the start. One can also add project-level ignore-rules for
-    the overly pedantic stuff.
+- [Contributor Covenant] as the Code of Conduct.
 
-  - **Static analysis ([mypy], [bandit]):** By default, mypy strict is enabled. Again, maintaining
-    strict, static typing from the start is much easier than translating to strict typing. Bandit is
-    a new tool I discovered to detect security vulnerabilities (injections, etc.) by analyzing the
-    AST. It can be excluded (default) if you do not need security guarantees.
+# TODO
 
-  - **Unittesting ([pytest]):** I follow the separate `tests/` convention.
+- Handle namespace packages better
+- Generate API documentation and push to Github pages.
 
-  - **Code coverage report ([coverage]):** `htmlcov=t ./scripts/test.sh`
+# Documentation
 
-- CI/CD:
-
-   - **Pipeline provider:** Github, Travis, or other? (not implemented yet).
-
-  - **[Tox] test env:** can test over a matrix of versions.
-
-  - **Upload code coverage report ([codecov]):** If the token is available (as in CI/CD
-    environments), `./scripts/test.sh` will upload to codecov.
-
-- [Sphinx] documentation (`./scripts/docs.sh` and open `docs/_build/index.html`):
-
-  - **Beautiful theme ([Alabaster theme]):** This is easily changeable in the generated project.
-
-  - **[Auto API documentation]:** supports Sphinx, Google-style, and Numpy-style doc-strings
-    ([napoleon]). Readers can also glean a lot of information from the types in each function
-    signature.
-
-  - **Improved API docs:** [intersphinx], [view code], types in description as well as signature
-    (not implemented yet).
-
-  - **[Doctests]:** keep documentation up-to-date automatically.
-
-
-- Deploy script (`./scripts/deploy.sh`):
-
-  - **Why is this relevant to my project:** Almost every project has a concept of "publishing" or
-    "deploying", so this can be overloaded for yours (could be run in CI/CD).
-
-  - **Publish as Python package:** The script can publish to [PyPI], although the repository is
-    configurable through `pyproject.toml`.
-
-  - **Publish documentation:** to [GitHub Pages] or [ReadTheDocs] (not implemented yet).
-
-  - **Version bumping ([bump2version]):** Publishing Automatically bumps the
-    version. E.g. `./scripts/deploy.sh minor` bumps the minor-version number, making a new commit
-    and a new tag for that version.
-
-- Other features:
-
-  - **CLI through [click]:** [Here's][1] a shakedown of the various options for a
-      commandline-interface. Click is by far the most concise. It also has facilities for being
-      passed an extant file (accepting UNIX conventions like `-`)
-
-  - **Resource directory (`res/`):** This directory and its contents will be present in all package
-    installations. Non-python configurations or data could go here.
-
-- TODO:
-
-  - **Namespace packages**
-
-  - **Deduplicate linting**
-
-  - **Make black compatible with autoflake**
-
-  - **Make tests part of package** This way, `mypy -p ${package}` works.
+- `repo_name`: Repository name in Github and on PyPI.
+- `package_name`: Importable package name (must be a valid Python identifier).
+- `description`: One sentence or phrase describing the package's purpose.
+- `license`: [SPDX license identifier] like `MIT` or `GPL-3.0-only`.
+- `repo_user`: If on Github, your Github username. Otherwise, this doesn't matter
+- `repo_url`: The URL at which the code repo is accessible.
+- `version`: Initial version.
+- `use_poetry`: Whether to use poetry for dependency management.
+- `pypi_package`: Whether to set up publishing on [PyPI] (doesn't publish anything until you run
+  `./script.py publish`). This requires use of poetry.
+- `keywords`: Relevant keywords for [PyPI].
+- `trove_license`: If creating a package, copy a `License ::` identifier from [PyPI classifiers].
+- `trove_intended_audience`: If creating a package, copy **one or more** comma-separated `Intended
+  Audience ::` identifiers from [PyPI classifiers].
+- `trove_topics`: If creating a package, copy **one or more** comma-separated `Topic ::`
+  identifiers from [PyPI classifiers].
+- `trove_other_classifiers`: If creating a package, copy **zero or more** comma-separated identifiers
+  from [PyPI classifiers].
 
 [Pipenv]: https://pipenv.pypa.io/en/latest/
 [Poetry]: https://python-poetry.org/
-[click]: https://click.palletsprojects.com/
-[1]: https://realpython.com/comparing-python-command-line-parsing-libraries-argparse-docopt-click/"
 [Contributor Covenant]:  https://www.contributor-covenant.org/
-[autoflake]: https://github.com/myint/autoflake
 [isort]: https://github.com/timothycrosley/isort
 [black]: https://github.com/psf/black
 [pylint]: https://pylint.org/
 [mypy]: https://mypy.readthedocs.io/en/stable/
-[bandit]: https://github.com/PyCQA/bandit
 [pytest]: https://docs.pytest.org/en/stable/
 [coverage]: https://coverage.readthedocs.io/en/coverage-5.1/
-[codecov]: https://codecov.io/
-[Alabaster theme]: https://alabaster.readthedocs.io/en/latest/
 [bump2version]: https://github.com/c4urself/bump2version/
-[example badges]: https://pypi.org/project/inquirer/
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
-[sphinx]: https://www.sphinx-doc.org/
 [tox]: https://tox.readthedocs.io/en/latest/
-[Auto API documentation]: https://sphinx-autoapi.readthedocs.io/en/latest/
-[napoleon]: https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html
-[intersphinx]: https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
-[view code]: https://www.sphinx-doc.org/en/master/usage/extensions/viewcode.html
-[doctests]: https://www.sphinx-doc.org/en/master/usage/extensions/doctest.html
 [PyPI]: pypi.org/
-[GitHub Pages]: https://pages.github.com/
-[flake8]: https://flake8.pycqa.org/en/latest/index.html
-[ReadTheDocs]: https://readthedocs.org/
+[radon]: https://radon.readthedocs.io/en/latest/
+[PEP 518]: https://peps.python.org/pep-0518/
+[rstcheck]: https://github.com/myint/rstcheck
+[twine]: https://twine.readthedocs.io/en/latest/
+[PyPI classifiers]: https://pypi.org/classifiers/
+[Nix]: https://nixos.org/
+[SPDX license identifier]: https://spdx.org/licenses/

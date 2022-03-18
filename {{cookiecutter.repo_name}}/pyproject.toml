@@ -26,8 +26,8 @@ classifiers = [
 	"{{ cookiecutter.trove_license }}",
 	"{{ cookiecutter.trove_intended_audience.split(',') | join('",\n\t"') }}",
 	"{{ cookiecutter.trove_topics.split(',') | join('",\n\t"') }}",
-	{%- if cookiecutter.trove_classifiers -%}
-	"{{ cookiecutter.trove_classifiers.split(',') | join('",\n\t"') }}",
+	{%- if cookiecutter.trove_other_classifiers -%}
+	"{{ cookiecutter.trove_other_classifiers.split(',') | join('",\n\t"') }}",
 	{%- endif %}
 ]
 {%- endif %}
