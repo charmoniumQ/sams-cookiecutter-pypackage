@@ -103,8 +103,8 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 - Github workflow automation: Creates a basic automation workflow that runs `./script.py all-tests`.
 
 - A note on packages: Even if you don't intend to publish a package, you should probably think of
-  your code as a package, because this gives you a single namespace to put everything and most
-  dependency tools operate at the package-level.
+  your code as a package, because this gives you a single namespace to put your modules, most
+  dependency tools operate at the package-level, and `pyproject.toml` operates at a package-level.
 
 - `pyproject.toml` introduced in [PEP 518] is the replacement for `setup.py` and `setup.cfg`. It is
   a unified space for storing the configuration of arbitrary tools.
@@ -166,3 +166,5 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 [Nix]: https://nixos.org/
 [SPDX license identifier]: https://spdx.org/licenses/
 [charmonium.cache]: https://github.com/charmoniumQ/charmonium.cache/
+[autoimport]: https://lyz-code.github.io/autoimport/
+[proselint]: http://proselint.com/
