@@ -106,6 +106,10 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
   your code as a package, because this gives you a single namespace to put your modules, most
   dependency tools operate at the package-level, and `pyproject.toml` operates at a package-level.
 
+- `README.rst` with cool-looking automatically updating status buttons. The ReStructured Text is a
+  bit less pleasant than Markdown, but Markdown is still a second-class citizen on PyPI, whereas
+  both can render ReStructuredText just fine. `rstcheck` should help the syntax issues.
+
 - `pyproject.toml` introduced in [PEP 518] is the replacement for `setup.py` and `setup.cfg`. It is
   a unified space for storing the configuration of arbitrary tools.
 
@@ -117,7 +121,9 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
   Python versions), Nix can install these for you. If you already have a system that works, you can
   safely ignore `flake.nix`.
 
-- [Contributor Covenant] as the Code of Conduct.
+- [Contributor Covenant] as the Code of Conduct. If you are
+  philosophically opposed to codes of conduct, just remove it in the
+  generated repo.
 
 # Documentation
 
