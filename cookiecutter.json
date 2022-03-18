@@ -7,7 +7,7 @@
     , "license": ["MIT", "BSD-3-clause", "GPL-3.0", "MPL-2.0"]
 	, "__year": "{% now 'utc', '%Y' %}"
 	, "repo_user": ""
-	, "repo_url": "https://github.com/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name }}.git"
+	, "repo_url": "https://github.com/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name }}"
 	, "version": "0.1.0"
 	, "keywords": ""
 	, "trove_license": "License :: OSI Approved :: MIT License"
@@ -15,4 +15,6 @@
 	, "trove_topics": ""
 	, "trove_classifiers": ""
 	, "nix_dependencies": ""
+	, "use_poetry": "yes"
+	, "pypi_package": "yes"
 }

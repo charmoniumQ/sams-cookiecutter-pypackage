@@ -7,7 +7,7 @@ package_name = "{{ cookiecutter.package_name }}"
 
 license_text = urllib.request.urlopen(f"https://spdx.org/licenses/{license}.txt").read()
 
-Path("LICENSE").write_text(Path("LICENSE").read_text() + "\n" + license_text.decode())
+Path("LICENSE").write_bytes(license_text)
 
 if "." in package_name:
     src_path = Path(package_name)
