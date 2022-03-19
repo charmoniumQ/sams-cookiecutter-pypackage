@@ -4,7 +4,7 @@
 	, "description": ""
 	, "author_name": ""
 	, "author_email": ""
-    , "license": "MIT",
+	, "license": "MIT"
 	, "__year": "{% now 'utc', '%Y' %}"
 	, "repo_user": ""
 	, "repo_url": "https://github.com/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name }}"
@@ -15,6 +15,6 @@
 	, "trove_license": "License :: OSI Approved :: MIT License"
 	, "trove_intended_audience": "Intended Audience :: Developers"
 	, "trove_topics": "Topic :: Software Development :: Libraries :: Python Modules"
-	, "trove_classifiers": ""
+	, "trove_other_classifiers": ""
 	, "nix_dependencies": ""
 }
