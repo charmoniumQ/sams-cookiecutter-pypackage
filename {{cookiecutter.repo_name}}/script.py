@@ -361,7 +361,7 @@ def publish(
     if "TWINE_PASSWORD" in os.environ:
         extra_args += ["--password", os.environ["TWINE_PASSWORD"]]
     subprocess.run(
-        ["poetry", "publish", "--build", **extra_args],
+        ["poetry", "publish", "--build", *extra_args],
         check=True,
     )
     shutil.rmtree("dist")
