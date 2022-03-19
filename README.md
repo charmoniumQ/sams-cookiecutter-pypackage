@@ -61,47 +61,72 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 
 - `./script.py`: This script has run commands for all of the tools you should need. Putting these
   all into a script gives three advantages:
-  - It makes it easier to standardize the which tools are invoked and how they are invoked between developers and CI.
+
+  - It makes it easier to standardize the which tools are invoked and how they are invoked between
+    developers and CI.
+
   - It lets some of the configuration be dynamic rather than repeated. This reduces repetition. For
     example, `pytest-cov` needs to know what to measure coverage against. The script finds the
-    current package and uses that.
-  - It can run multiple devtools in parallel that would be tedious to type out. For example, `./script.py test` runs all six tools in parallel.
+    current package and uses that rather than repeating the name in many more places.
+
+  - It can run multiple devtools in parallel that would be tedious to type out. For example,
+    `./script.py test` runs all six tools in parallel.
 
 - `./script.py fmt`: Fix your code in place
+
    - [autoimport] guesses and inserts the import statement if you forget to write it.
+
    - [isort] your imports, so you don't have to.
+
    - [Black] "aims to enforce one style and one style only, with some room for pragmatism." If you
      don't like how this formats a single line, you can ignore just that section with `# fmt:
      off`/`# fmt: on`.
 
 - `./script.py test`: Runs tests on your code.
-  - [pylint] is the most thorough and it warns for semantic errors. If some particular warning is
-    bothering you, you can ignore it in the `pylintrc`. Pylint gives you a report to see if your
-    code has worsened.
-  - [mypy] type-checks Python code with type annotations. By default, strict mode is enabled, but
-    this can be relaxed in `pyproject.toml`
+
+  - [pylint] is the most thorough and it warns for semantic errors. If
+    some particular warning is bothering you, you can ignore it in the
+    `pylintrc`. Pylint gives you a colorful report to see if your code
+    has worsened.
+
+  - [mypy] type-checks Python code with type annotations. By default,
+    strict mode is enabled, but this can be relaxed in
+    `pyproject.toml` > `tool.mypy`. It is far easier to use type
+    checking from the beginning than it is to enforce type checking on
+    an untyped project.
+
   - [pytest] runs tests in parallel with debug information. This cookiecutter includes a template
     for writing your own tests.
-  - [coverage] to evaluate code coverage.
+
+  - [coverage.py] to evaluate code coverage of the tests.
+
   - [radon] tells you which modules and functions are most complex. This helps you know what to
     simplify.
 
 - `./script.py all-tests`: Runs extra tests on your code in every environment.
+
   - [tox] runs tests in multiple Python environments, so you can test compatibility.
-  - [rstcheck] checks your `README.rst`.
+
+  - [rstcheck] and [proselint] checks your `README.rst`.
+
   - [twine] checks the resulting package.
 
 - `./script.py publish`: Publishes the code to PyPI and documentation to Github pages.
   - [bump2version] bumps the version, writes a git tag, and pushes it to Github (if everything
     succeeded).
+
   - [poetry] does the actual build and publish. Set `TWINE_USERNAME` and `TWINE_PASSWORD` to
     automate entering credentials.
 
 - `./script.py docs`: Check and render documentation.
+
   - [proselint] checks grammar and spelling in ReStructured Text files.
+
   - TODO: generate API docs. I am unhappy with sphinx and looking for replacements.
 
 - Github workflow automation: Creates a basic automation workflow that runs `./script.py all-tests`.
+
+- A minimal but useful Github issue template.
 
 - A note on packages: Even if you don't intend to publish a package, you should probably think of
   your code as a package, because this gives you a single namespace to put your modules, most
@@ -120,7 +145,8 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 
 - (Optional) [Nix] for package management: If you need system-level dependencies (e.g. C libraries,
   Python versions), Nix can install these for you. If you already have a system that works, you can
-  safely ignore `flake.nix`.
+  safely ignore `flake.nix`. If you use this, it guarantees you have the exact same development
+  environment as CI and other developers.
 
 - [Contributor Covenant] as the Code of Conduct. If you are philosophically opposed to codes of
   conduct, just remove it in the generated repo.
@@ -128,27 +154,41 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 # Documentation
 
 - `repo_name`: Repository name in Github and on PyPI.
+
 - `package_name`: Importable package name (must be a valid Python identifier).
+
 - `description`: One sentence or phrase describing the package's purpose.
+
 - `license`: [SPDX license identifier] like `MIT` or `GPL-3.0-only`.
+
 - `repo_user`: If on Github, your Github username. Otherwise, this doesn't matter
+
 - `repo_url`: The URL at which the code repo is accessible.
+
 - `version`: Initial version.
+
 - `use_poetry`: Whether to use poetry for dependency management.
+
 - `pypi_package`: Whether to set up publishing on [PyPI] (doesn't publish anything until you run
   `./script.py publish`). This requires use of poetry.
+
 - `keywords`: If publishing to PyPI, put relevant keywords to make your package discoverable.
+
 - `trove_license`: If publishing to PyPI, copy a `License ::` identifier from [PyPI classifiers].
+
 - `trove_intended_audience`: If publishing to PyPI, copy **one or more** comma-separated `Intended
   Audience ::` identifiers from [PyPI classifiers].
+
 - `trove_topics`: If publishing to PyPI, copy **one or more** comma-separated `Topic ::`
   identifiers from [PyPI classifiers].
+
 - `trove_other_classifiers`: If publishing to PyPI, copy **zero or more** comma-separated identifiers
   from [PyPI classifiers].
 
 # TODO
 
 - Handle namespace packages better
+
 - Generate API documentation and push to Github pages.
 
 [Pipenv]: https://pipenv.pypa.io/en/latest/
@@ -159,7 +199,7 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 [pylint]: https://pylint.org/
 [mypy]: https://mypy.readthedocs.io/en/stable/
 [pytest]: https://docs.pytest.org/en/stable/
-[coverage]: https://coverage.readthedocs.io/en/coverage-5.1/
+[coverage.py]: https://coverage.readthedocs.io/en/coverage-5.1/
 [bump2version]: https://github.com/c4urself/bump2version/
 [cookiecutter]: https://github.com/cookiecutter/cookiecutter
 [tox]: https://tox.readthedocs.io/en/latest/

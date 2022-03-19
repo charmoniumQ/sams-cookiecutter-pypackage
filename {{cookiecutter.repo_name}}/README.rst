@@ -48,8 +48,7 @@
 Quickstart
 ----------
 
-If you don't have ``pip`` installed, see the `pip install
-guide`_.
+If you don't have ``pip`` installed, see the `pip install guide`_.
 
 .. _`pip install guide`: https://pip.pypa.io/en/latest/installing/
 
@@ -59,3 +58,7 @@ guide`_.
 
 >>> import {{ cookiecutter.package_name }}
 {% endif %}
+
+See `CONTRIBUTING.md`_ for instructions on setting up a development environment.
+
+.. _`CONTRIBUTING.md`: {{ cookiecutter.repo_url }}/tree/main/CONTRIBUTING.md
