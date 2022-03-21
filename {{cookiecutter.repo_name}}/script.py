@@ -361,10 +361,19 @@ def publish(
         extra_args += ["--username", os.environ["TWINE_USERNAME"]]
     if "TWINE_PASSWORD" in os.environ:
         extra_args += ["--password", os.environ["TWINE_PASSWORD"]]
-    subprocess.run(
-        ["poetry", "publish", "--build", *extra_args],
-        check=True,
-    )
+    try:
+        subprocess.run(
+            ["poetry", "publish", "--build", *extra_args],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        # Undo bump2version
+        pyproject = toml.loads(Path("pyproject.toml").read_text())
+        tag = "v" + pyproject["tool"]["bump2version"]["current_version"]
+        subprocess.run(["git", "tag", "--delete", tag])
+        subprocess.run(["git", "reset", "--hard", "HEAD~1"])
+        shutil.rmtree("dist")
+        raise e
     shutil.rmtree("dist")
     subprocess.run(["git", "push", "--tags"], check=True)
     subprocess.run(["git", "push"], check=True)

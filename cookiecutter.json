@@ -12,7 +12,6 @@
 	, "use_poetry": "yes"
 	, "pypi_package": "yes"
 	, "keywords": ""
-	, "trove_license": "License :: OSI Approved :: MIT License"
 	, "trove_intended_audience": "Intended Audience :: Developers"
 	, "trove_topics": "Topic :: Software Development :: Libraries :: Python Modules"
 	, "trove_other_classifiers": ""

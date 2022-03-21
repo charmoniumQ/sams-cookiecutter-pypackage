@@ -5,6 +5,8 @@ name = "pypi"
 
 [packages]
 cookiecutter = {git = "https://github.com/cookiecutter/cookiecutter.git"}
+pytest = "*"
+toml = "*"
 
 [dev-packages]
 

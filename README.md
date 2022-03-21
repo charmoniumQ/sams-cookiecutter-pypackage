@@ -146,7 +146,8 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 - (Optional) [Nix] for package management: If you need system-level dependencies (e.g. C libraries,
   Python versions), Nix can install these for you. If you already have a system that works, you can
   safely ignore `flake.nix`. If you use this, it guarantees you have the exact same development
-  environment as CI and other developers.
+  environment as CI and other developers. Even if you already have a satisfactory system python,
+  consider using Nix because it builds multiple isolated Pythons for use with Tox.
 
 - [Contributor Covenant] as the Code of Conduct. If you are philosophically opposed to codes of
   conduct, just remove it in the generated repo.
@@ -174,13 +175,14 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 
 - `keywords`: If publishing to PyPI, put relevant keywords to make your package discoverable.
 
-- `trove_license`: If publishing to PyPI, copy a `License ::` identifier from [PyPI classifiers].
+- `trove_license`: If publishing to PyPI, copy zero or more `License ::` identifier from [PyPI
+  classifiers].
 
-- `trove_intended_audience`: If publishing to PyPI, copy **one or more** comma-separated `Intended
+- `trove_intended_audience`: If publishing to PyPI, copy zero or more comma-separated `Intended
   Audience ::` identifiers from [PyPI classifiers].
 
-- `trove_topics`: If publishing to PyPI, copy **one or more** comma-separated `Topic ::`
-  identifiers from [PyPI classifiers].
+- `trove_topics`: If publishing to PyPI, copy zero or more comma-separated `Topic ::` identifiers
+  from [PyPI classifiers].
 
 - `trove_other_classifiers`: If publishing to PyPI, copy **zero or more** comma-separated identifiers
   from [PyPI classifiers].
@@ -190,6 +192,8 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 - Handle namespace packages better
 
 - Generate API documentation and push to Github pages.
+
+- Use cookiecutter for this repo.
 
 [Pipenv]: https://pipenv.pypa.io/en/latest/
 [Poetry]: https://python-poetry.org/

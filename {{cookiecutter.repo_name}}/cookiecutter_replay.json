@@ -13,7 +13,6 @@
     "use_poetry": "{{cookiecutter.use_poetry}}",
     "pypi_package": "{{cookiecutter.pypi_package}}",
     "keywords": "{{cookiecutter.keywords}}",
-    "trove_license": "{{cookiecutter.trove_license}}",
     "trove_intended_audience": "{{cookiecutter.trove_intended_audience}}",
     "trove_topics": "{{cookiecutter.trove_topics}}",
     "trove_other_classifiers": "{{cookiecutter.trove_other_classifiers}}",
