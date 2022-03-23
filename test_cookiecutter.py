@@ -59,9 +59,6 @@ def test_cookiecutter():
             if key not in {"VIRTUAL_ENV", "PIP_PYTHON_PATH", "PIPENV_ACTIVE", "PIP_DISABLE_PIP_VERSION_CHECK", "PYTHONNOUSERSITE"}
         },
     }
-    run(["git", "init"], check=True, cwd=repo, env=env)
-    run(["git", "add", "-A"], check=True, cwd=repo, env=env)
-    run(["git", "commit", "-m", "test"], check=True, cwd=repo, env=env)
     if use_poetry:
         nix_command = ["nix", "develop", "--command"]
         run([*nix_command, "hello"], check=True, cwd=repo, env=env)
@@ -71,12 +68,9 @@ def test_cookiecutter():
         assert venv_path + b"/bin/python" == python_exe, (venv_path + b"/bin/python", python_exe)
         # I expect only these new files.
         # I will commit them so that I can test if I am creating any _other_ new files.
-        run(["git", "add", "poetry.lock", "flake.lock"], check=True, cwd=repo, env=env)
-        run(["git", "commit", "-m", "test"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "fmt"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "test"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "all-tests"], check=True, cwd=repo, env=env)
-        proc = run(["git", "--no-pager", "diff"], check=True, cwd=repo, env=env, capture_output=True)
         assert not proc.stdout, "Running scripts should create no diff."
         assert any("License ::" in classifier for classifier in pyproject["tool"]["poetry"]["classifiers"])
     else:
