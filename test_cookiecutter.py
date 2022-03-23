@@ -48,11 +48,6 @@ def test_cookiecutter():
     repo = dest / repo_name
     pyproject = toml.loads((repo / "pyproject.toml").read_text())
     env = {
-        "PATH": ":".join([
-            path
-            for path in os.environ["PATH"].split(":")
-            if path != os.environ["VIRTUAL_ENV"]
-        ]),
         **{
             key: val
             for key, val in os.environ.items()
