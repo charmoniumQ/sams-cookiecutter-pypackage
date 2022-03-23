@@ -19,6 +19,11 @@
    :alt: libraries.io sourcerank
    :target: https://libraries.io/pypi/{{ cookiecutter.package_name }}
 {%- endif %}
+{%- if cookiecutter.docs_url != 'none' -%}
+.. image:: https://img.shields.io/badge/docs-yes-success
+   :alt: Repo
+   :target: {{ cookiecutter.docs_url }}
+{%- endif %}
 {% if 'github' in cookiecutter.repo_url -%}
 .. image:: https://img.shields.io/github/stars/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name }}?style=social
    :alt: GitHub stars
@@ -29,10 +34,11 @@
 .. image:: https://img.shields.io/github/last-commit/charmoniumQ/charmonium.determ_hash
    :alt: GitHub last commit
    :target: {{ cookiecutter.repo_url }}/commits
-{%- else -%}
+{%- elif cookiecutter.repo_url != 'none' -%}
 .. image:: https://img.shields.io/badge/repo-yes-success
    :alt: Repo
    :target: {{ cookiecutter.repo_url }}
+{%- else -%}
 {%- endif %}
 .. image:: http://www.mypy-lang.org/static/mypy_badge.svg
    :target: https://mypy.readthedocs.io/en/stable/

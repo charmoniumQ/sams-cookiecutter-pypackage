@@ -48,34 +48,35 @@ def test_cookiecutter():
     repo = dest / repo_name
     pyproject = toml.loads((repo / "pyproject.toml").read_text())
     env = {
-        **os.environ,
         "PATH": ":".join([
             path
             for path in os.environ["PATH"].split(":")
             if path != os.environ["VIRTUAL_ENV"]
         ]),
-        "VIRTUAL_ENV": "",
-        "PIP_PYTHON_PATH": "",
-        "PIPENV_ACTIVE": "",
-        "PIP_DISABLE_PIP_VERSION_CHECK": "",
-        "PYTHONNOUSERSITE": "",
+        **{
+            key: val
+            for key, val in os.environ.items()
+            if key not in {"VIRTUAL_ENV", "PIP_PYTHON_PATH", "PIPENV_ACTIVE", "PIP_DISABLE_PIP_VERSION_CHECK", "PYTHONNOUSERSITE"}
+        },
     }
     run(["git", "init"], check=True, cwd=repo, env=env)
     run(["git", "add", "-A"], check=True, cwd=repo, env=env)
     run(["git", "commit", "-m", "test"], check=True, cwd=repo, env=env)
-    nix_command = ["nix", "develop", "--command"]
-    run([*nix_command, "hello"], check=True, cwd=repo, env=env)
-    run([*nix_command, "fortune"], check=True, cwd=repo, env=env)
-    # I expect only these new files.
-    # I will commit them so that I can test if I am creating any _other_ new files.
-    run(["git", "add", "poetry.lock", "flake.lock"], check=True, cwd=repo, env=env)
-    run(["git", "commit", "-m", "test"], check=True, cwd=repo, env=env)
     if use_poetry:
-        # We should have Python packages in here.
+        nix_command = ["nix", "develop", "--command"]
+        run([*nix_command, "hello"], check=True, cwd=repo, env=env)
+        run([*nix_command, "fortune"], check=True, cwd=repo, env=env, capture_output=True)
+        venv_path = run([*nix_command, "poetry", "env", "info", "--path"], check=True, cwd=repo, env=env, capture_output=True).stdout.strip()
+        python_exe = run([*nix_command, "which", "python"], check=True, cwd=repo, env=env, capture_output=True).stdout.strip()
+        assert venv_path + b"/bin/python" == python_exe, (venv_path + b"/bin/python", python_exe)
+        # I expect only these new files.
+        # I will commit them so that I can test if I am creating any _other_ new files.
+        run(["git", "add", "poetry.lock", "flake.lock"], check=True, cwd=repo, env=env)
+        run(["git", "commit", "-m", "test"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "fmt"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "test"], check=True, cwd=repo, env=env)
         run([*nix_command, "./script.py", "all-tests"], check=True, cwd=repo, env=env)
-        proc = run(["git", "diff"], check=True, cwd=repo, env=env, capture_output=True)
+        proc = run(["git", "--no-pager", "diff"], check=True, cwd=repo, env=env, capture_output=True)
         assert not proc.stdout, "Running scripts should create no diff."
         assert any("License ::" in classifier for classifier in pyproject["tool"]["poetry"]["classifiers"])
     else:

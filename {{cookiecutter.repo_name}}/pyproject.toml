@@ -6,7 +6,12 @@ description = "{{ cookiecutter.description }}"
 authors = ["{{ cookiecutter.author_name }} <{{ cookiecutter.author_email }}>"]
 license = "{{ cookiecutter.license }}"
 readme = "README.rst"
+{% if cookiecutter.repo_url != 'none' -%}
 repository = "{{ cookiecutter.repo_url}}"
+{%- endif %}
+{% if cookiecutter.docs_url != 'none' -%}
+documentation = "{{ cookiecutter.docs_url }}"
+{%- endif %}
 {% if '.' in cookiecutter.package_name %}
 packages = [
 	{ include = "{{ cookiecutter.package_name.split('.')[0] }}" },
@@ -122,8 +127,8 @@ bump2version = "^1.0.1"
 typer = "^0.4.0"
 termcolor = "^1.1.0"
 typing-extensions = "^4.1.1"
-ipython = "^7.29.0"
-ipdb = "^0.13.9"
+# ipython = "^7.29.0"
+# ipdb = "^0.13.9"
 types-setuptools = "^57.4.10"
 types-toml = "^0.10.4"
 types-termcolor = "^1.1.3"

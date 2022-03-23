@@ -8,6 +8,7 @@
 	, "__year": "{% now 'utc', '%Y' %}"
 	, "repo_user": ""
 	, "repo_url": "https://github.com/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name }}"
+	, "docs_url": "none"
 	, "version": "0.1.0"
 	, "use_poetry": "yes"
 	, "pypi_package": "yes"
