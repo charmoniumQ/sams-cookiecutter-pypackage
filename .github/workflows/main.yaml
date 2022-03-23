@@ -10,16 +10,11 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
+      - run: |
+          sudo apt-get install -y python3 pipenv
 
       - uses: actions/checkout@v2
 
-      - uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: install --dev
-      
-      - uses: VaultVulp/action-pipenv@v2.0.1
-        with:
-          command: run python test_cookiecutter.py
+      - run: |
+          pipenv install
+          pipenv run python test_cookiecutter.py

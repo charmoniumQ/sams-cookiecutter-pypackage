@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 cookiecutter = {git = "https://github.com/cookiecutter/cookiecutter.git"}
+toml = "*"
 
 [dev-packages]
-toml = "*"
 
 [requires]
 python_version = "3.9"
