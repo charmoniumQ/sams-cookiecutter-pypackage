@@ -12,10 +12,10 @@ jobs:
 
       - uses: actions/checkout@v2
 
-    - uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: install --dev
-    
-    - uses: VaultVulp/action-pipenv@v2.0.1
-      with:
-        command: run python test_cookiecutter.py
+      - uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: install --dev
+      
+      - uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: run python test_cookiecutter.py
