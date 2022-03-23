@@ -1,0 +1,21 @@
+on: [push, pull_request]
+name: test
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.9'
+
+      - uses: actions/checkout@v2
+
+    - uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: install --dev
+    
+    - uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run python test_cookiecutter.py
