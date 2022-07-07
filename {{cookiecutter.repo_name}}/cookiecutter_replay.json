@@ -19,5 +19,5 @@
     "trove_other_classifiers": "{{cookiecutter.trove_other_classifiers}}",
     "nix_dependencies": "{{cookiecutter.nix_dependencies}}"
   },
-  "comment": "This repository was created from a template in <https://github.com/charmoniumQ/sams-cookiecutter-pypackage.git> with these options. Use `cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git --output-dir . --overwrite-if-exists --replay --replay-file cookiecutter_replay.json` to regenerate."
+  "comment": "This repository was created from a template in <https://github.com/charmoniumQ/sams-cookiecutter-pypackage.git> with these options. Use `cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage --output-dir . --overwrite-if-exists --replay --replay-file cookiecutter_replay.json` to regenerate."
 }

@@ -28,6 +28,7 @@ project will activate the project-specific environment.
 $ nix-env -iA nixpkgs.direnv nixpkgs.nix-direnv
 $ echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
 $ echo 'source $HOME/.nix-profile/share/nix-direnv/direnvrc' >> ~/.direnvrc
+$ . ~/.bashrc
 
 $ # optional, for prompt
 $ echo 'PS1="\$PREPEND_TO_PS1$PS1"' >> ~/.bashrc
@@ -50,10 +51,11 @@ Nix can be trouble to set up, so here is how to use the project without Nix. [Po
 around `pip`/`virtualenv`, and it will manage dependencies from PyPI, but *you* have to manage
 external dependencies, e.g. installing the right version of Python, C libraries, etc.
 
-```
+```sh
 $ sudo apt install -y python3 python3-pip
 $ python -m pip --user --upgrade install poetry
-$ if ! grep "$HOME/.local/bin" <(echo $PATH) ; then echo 'PATH=$HOME/.local/bin:$PATH' >> .bashrc fi
+$ if ! grep "$HOME/.local/bin" <(echo $PATH) ; then echo 'PATH=$HOME/.local/bin:$PATH' >> ~/.bashrc; fi
+$ . ~/.bashrc
 ```
 
 - `poetry shell` to get a shell.

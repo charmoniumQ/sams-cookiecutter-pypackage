@@ -27,9 +27,9 @@ classifiers = [
 	"Development Status :: 4 - Beta",
 	{%- else -%}
 	"Development Status :: 5 - Production/Stable",
-	# TODO: Insert trove classifier here.
+	# TODO: Insert trove license classifier here.
 	{%- endif %}
-	{%- if cookiecutter.trove_intended_audience -%}
+	{% if cookiecutter.trove_intended_audience -%}
 	"{{ cookiecutter.trove_intended_audience.split(',') | join('",\n\t"') }}",
 	{%- endif %}
 	{%- if cookiecutter.trove_topics -%}

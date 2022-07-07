@@ -10,11 +10,14 @@ jobs:
         with:
           nix_path: nixpkgs=channel:nixos-unstable
 
-      - run: |
-          sudo apt-get install -y python3 pipenv
-
       - uses: actions/checkout@v2
 
-      - run: |
-          pipenv install
-          pipenv run python test_cookiecutter.py
+      - uses: actions/cache@v2
+        with:
+          path: |
+            build/
+            .tox/
+            $HOME/.cache/pypoetry/
+          key: venv-${{ hashFiles('poetry.lock') }}-${{ hashFiles('pyproject.toml') }}
+
+      - run: nix develop --command pytest test_cookiecutter.py

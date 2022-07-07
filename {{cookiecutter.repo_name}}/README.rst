@@ -19,7 +19,7 @@
    :alt: libraries.io sourcerank
    :target: https://libraries.io/pypi/{{ cookiecutter.package_name }}
 {%- endif %}
-{%- if cookiecutter.docs_url != 'none' -%}
+{% if cookiecutter.docs_url != 'none' -%}
 .. image:: https://img.shields.io/badge/docs-yes-success
    :alt: Repo
    :target: {{ cookiecutter.docs_url }}
@@ -31,7 +31,7 @@
 .. image:: {{ cookiecutter.repo_url }}/actions/workflows/main.yaml/badge.svg
    :alt: CI status
    :target: {{ cookiecutter.repo_url }}/actions/workflows/main.yaml
-.. image:: https://img.shields.io/github/last-commit/charmoniumQ/charmonium.determ_hash
+.. image:: https://img.shields.io/github/last-commit/{{ cookiecutter.repo_user }}/{{ cookiecutter.repo_name}}
    :alt: GitHub last commit
    :target: {{ cookiecutter.repo_url }}/commits
 {%- elif cookiecutter.repo_url != 'none' -%}

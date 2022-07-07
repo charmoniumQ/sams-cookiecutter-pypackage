@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import datetime
+import itertools
 import multiprocessing
 import os
 import shlex
@@ -35,7 +36,7 @@ from charmonium.async_subprocess import run
 from termcolor import cprint
 from typing_extensions import ParamSpec
 
-Params = ParamSpec("Parms")
+Params = ParamSpec("Params")
 Return = TypeVar("Return")
 
 
@@ -348,11 +349,10 @@ def publish(
                 pyproject["tool"]["poetry"]["version"],
                 version_part.value,
                 "pyproject.toml",
-                *[
-                    str(Path(package.replace(".", "/")) / "__init__.py")
+                *itertools.chain.from_iterable(
+                    Path(package.replace(".", "/")).glob("**/__init__.py")
                     for package in src_packages
-                    if (Path(package.replace(".", "/")) / "__init__.py").exists()
-                ],
+                ),
             ],
             check=True,
         )
