@@ -218,6 +218,9 @@ $ cookiecutter gh:charmoniumQ/sams-cookiecutter-pypackage.git \
 - [ ] Generate API documentation and push to Github pages.
 - [x] Use cookiecutter for this repo.
 - [ ] Switch from ReStructured Text to Markdown.
+- [ ] Fix {autoimport and removestar and unimport} or pyflyby.
+- [ ] Add vulture.
+
 
 [Pipenv]: https://pipenv.pypa.io/en/latest/
 [Poetry]: https://python-poetry.org/

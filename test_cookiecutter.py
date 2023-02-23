@@ -65,7 +65,6 @@ def test_cookiecutter(pypi_package, use_poetry):
     }
     if use_poetry:
         run(["git", "init"], check=True, cwd=repo, env=env)
-        run(["git", "branch", "main"], check=True, cwd=repo, env=env)
         run(["git", "add", "-A"], check=True, cwd=repo, env=env)
         run(["git", "commit", "-m", "initial commit"], check=True, cwd=repo, env=env)
         nix_command = ["nix", "develop", "--command"]
